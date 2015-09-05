@@ -11,6 +11,7 @@ func main() {
 	var input, key [7]int
 	var count int
 	xorWonbon := [7]int{1104, 99, 103, 75, 115, 36, 84}
+	// 1126, 75, 78, 55, 77, 88, 11
 	for i := 0; i < 7; i++ {
 		fmt.Print("Input : ")
 		fmt.Scanf("%d\n", &input[i])
@@ -26,6 +27,9 @@ func main() {
 	}
 	// Clear
 	if count == 7 {
-		fmt.Println("Clear! Convert to int to ascii")
+		fmt.Print(": ")
+		for l := 0; l < 7; l++ {
+			fmt.Print(string(ans[l]))
+		}
 	}
 }
