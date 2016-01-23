@@ -1,11 +1,14 @@
 <?php
 	$ip = $_SERVER["REMOTE_ADDR"];
 	$last_dot_index = strrpos($ip, ".");
-	// $last_second_dot = strrpos(substr($ip, 0, $last_dot_index), ".");
+	$second_last_dot = strrpos(substr($ip, 0, $last_dot_index - 1), ".");
 	echo($ip."<br />");
-	// for ($i = 1; $i <= $last_dot_index; $i++) {
-	// 	$ip[$last_second_dot + $i] = '*';
-	// }
+	for ($i = 1; $i < 3; $i++) {
+		if($second_last_dot + $i == $last_dot_index) {
+			break;
+		}
+		$ip[$second_last_dot + $i] = '*';
+	}
 	for ($i = 1; $i < 3; $i++) {
 		if ($ip[$last_dot_index + $i] == '') {
 			break;
