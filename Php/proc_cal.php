@@ -1,22 +1,5 @@
 <?php
-function plus($ran1, $ran2) {
-	return $ran1 + $ran2;
-}
-function minus($ran1, $ran2) {
-	if ($ran1 < $ran2) {
-		return $ran2 - $ran1;
-	}
-	return $ran1 - $ran2;
-}
-function multiple($ran1, $ran2) {
-	return $ran1 * $ran2;
-}
-function divide($ran1, $ran2) {
-	if ($ran1 < $ran2) {
-		return $ran2 / $ran1;
-	}
-	return $ran1 / $ran2;
-}
+include("./lib.php");
 $operand1 = isset($_POST["operand1"]) ? $_POST["operand1"] : false;
 $operand2 = isset($_POST["operand2"]) ? $_POST["operand2"] : false;
 if (!(is_numeric($operand1) && is_numeric($operand2))) {
