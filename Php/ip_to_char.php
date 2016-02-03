@@ -10,10 +10,13 @@
   </body>
 </html>
 <?php
-$ip = (isset($_POST["ip"])) ? $_POST["ip"] : die();
-echo("char(");
-for ($i = 0; $i < strlen($ip) - 1; $i++) {
-  echo(ord($ip[$i]).", ");
+include("./lib.php");
+$ip = (isset($_POST["ip"])) ? $_POST["ip"] : 0;
+if ($ip == 0) {
+  die();
 }
-echo(ord($ip[strlen($ip) - 1]).")");
+if (!is_numeric($ip)) {
+  die();
+}
+ip_to_char_func($ip);
 ?>
