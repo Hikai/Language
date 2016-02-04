@@ -53,4 +53,8 @@ function include_num($find_num_int, $max_int) {
   	}
   }
 }
+function time_and_md5() {
+  echo(time()."<br />");
+  echo(md5(time()));
+}
 ?>
