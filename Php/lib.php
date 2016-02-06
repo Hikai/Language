@@ -57,4 +57,12 @@ function time_and_md5() {
   echo(time()."<br />");
   echo(md5(time()));
 }
+function db_connect($host, $id, $pw, $db_name) {
+  $conn = @mysql_connect($host, $id, $pw) or die("DB connect error");
+  mysql_select_db($db_name, $conn) or die("Select db error");
+}
+function sql_query($query) {
+  $array_result = @mysql_fetch_array(mysql_query($query)) or die("Query error");
+  echo($array_result[0]);
+}
 ?>
