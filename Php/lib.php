@@ -67,8 +67,22 @@ function sql_query($query) {
 }
 function dir_file_lists($path) {
   $list = scandir("DIR");
-  for ($i = 0; $i < count($list); $i++) {
-  	echo($list[$i]."<br />");
+  return $list;
+}
+function get_page_next($page_get, $page_total) {
+  $page_next = 0;
+  if ($page_get == 1) {
+    $page_next = $page_get + 1;
+  } else {
+    $page_next = (($page_get + 2) > $page_total) ? $page_total : $page_get + 1;
   }
+  return $page_next;
+}
+function get_page_prev($page_get) {
+  $page_prev = 0;
+  if (!($page_get == 1)) {
+    $page_prev = $page_get - 1;
+  }
+  return $page_prev;
 }
 ?>
