@@ -65,4 +65,10 @@ function sql_query($query) {
   $array_result = @mysql_fetch_array(mysql_query($query)) or die("Query error");
   echo($array_result[0]);
 }
+function dir_file_lists($path) {
+  $list = scandir("DIR");
+  for ($i = 0; $i < count($list); $i++) {
+  	echo($list[$i]."<br />");
+  }
+}
 ?>
