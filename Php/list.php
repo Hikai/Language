@@ -22,3 +22,7 @@ if ($page_get == 1) {
         echo("<a href=\"/list.php?page=$page_next\">[Next]</a>");
 }
 ?>
+
+//<?php
+//system("cd ".$list[$i].";find . -type f \\( -name \"01.jpg\" -o -name "00.jpg" -o -name "1.jpg" \\)")
+//?>
