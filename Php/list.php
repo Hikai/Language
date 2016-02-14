@@ -25,4 +25,7 @@ if ($page_get == 1) {
 
 //<?php
 //system("cd ".$list[$i].";find . -type f \\( -name \"01.jpg\" -o -name "00.jpg" -o -name "1.jpg" \\)")
+//$dir + $list[$i] + "/"
+//find file 01.jpg or 00.jpg or 1.jpg.
+//system("cd ".$dir.$list[$i]."/".;find . -type f \\( -name \"01.jpg\" -o -name "00.jpg" -o -name "1.jpg" \\)");
 //?>
