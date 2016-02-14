@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+	<body>
+	<p id="p_o">[O]</p>
+	<script>
+		document.getElementById("p_o").addEventListener("mouseover", mouseover_event);
+		document.getElementById("p_o").addEventListener("mouseout", mouseout_event);
+		function mouseover_event() {
+			document.getElementById("p_o").innerHTML = "kkkkk";
+		}
+		function mouseout_event() {
+			document.getElementById("p_o").innerHTML = "[O]";
+		}
+	</script>
+	</body>
+</html>
