@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				$("*").css("background", "gray");
+			});
+		</script>
+	</head>
+	<body>
+	<div id="div_o">[O]</div>
+ 	<div id="div_a">[A]</div>
+	<script>
+	document.getElementById("div_o").addEventListener("mouseover", mouseover_event_o);
+	document.getElementById("div_o").addEventListener("mouseout", mouseout_event_o);
+	document.getElementById("div_a").addEventListener("mouseover", mouseover_event_a);
+	document.getElementById("div_a").addEventListener("mouseout", mouseout_event_a);
+	function mouseover_event_o() {
+		document.getElementById("div_o").innerHTML = "kkkkk";
+	}
+	function mouseout_event_o() {
+		document.getElementById("div_o").innerHTML = "[O]";
+	}
+	function mouseover_event_a() {
+		document.getElementById("div_a").style = "background-color: red";
+	}
+	function mouseout_event_a() {
+		document.getElementById("div_a").style = "background-color: white";
+	}
+	</script>
+	</body>
+</html>
