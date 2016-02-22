@@ -23,8 +23,9 @@ DROP TABLE IF EXISTS `game_account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `game_account` (
-  `name` varchar(100) DEFAULT NULL,
-  `pw` varchar(100) DEFAULT NULL
+  `id` varchar(100) NOT NULL,
+  `pw` varchar(100) NOT NULL,
+  `level` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -46,4 +47,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-22 22:03:04
+-- Dump completed on 2016-02-23  0:26:55
