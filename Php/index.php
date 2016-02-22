@@ -2,6 +2,9 @@
 if (!isset($_SESSION)) {
 	session_start();
 }
+$name = "";
+$pw = "";
+$level = 0;
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -34,12 +37,17 @@ if (!isset($_SESSION["char_name"]) || !isset($_SESSION["char_pw"])) {
 	if ($array_query_result["name"] == $name) {
 		$_SESSION["name"] = $name;
 		$_SESSION["pw"] = $pw;
+		$level = $array_query_result["level"];
 		header("Refresh: 0");
 	}
 } else {
 ?>
 	<body>
 		<p>hello</p>
+<?php
+	echo("<p>name : ".$name."</p>");
+	echo("<p>level : ".$level."</p>");
+?>
 	</body>
 </html>
 <?php
