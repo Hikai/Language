@@ -38,6 +38,7 @@ if (!isset($_SESSION["char_name"]) || !isset($_SESSION["char_pw"])) {
 		$_SESSION["name"] = $name;
 		$_SESSION["pw"] = $pw;
 		$level = $array_query_result["level"];
+		$_SESSION["level"] = $level;
 		header("Refresh: 0");
 	}
 } else {
@@ -48,6 +49,7 @@ if (!isset($_SESSION["char_name"]) || !isset($_SESSION["char_pw"])) {
 	echo("<p>name : ".$name."</p>");
 	echo("<p>level : ".$level."</p>");
 ?>
+		<p><a href="info.php">[INFO]</a></p><br />
 	</body>
 </html>
 <?php
