@@ -13,7 +13,7 @@ $level = 0;
 		<title>game</title>
 	</head>
 <?php
-if (!isset($_SESSION["char_name"]) || !isset($_SESSION["char_pw"])) {
+if (!isset($_SESSION["name"]) || !isset($_SESSION["pw"]) || !isset($_SESSION["level"])) {
 	include("./lib.php");
 ?>
 	<body>
