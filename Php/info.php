@@ -7,12 +7,12 @@ if (!isset($_SESSION["name"]) || !isset($_SESSION["pw"]) || !isset($_SESSION["le
 	exit;
 }
 echo("Level : ".$_SESSION["level"]."<br />");
-$skills = array("1", "", "2", "", "3");
+$skills = array("skill_1", "", "skill_2", "", "skill_3");
 echo("Able skills :<br />");
 for ($i = 0; $i <= $_SESSION["level"]; $i++) {
-	if ($item === "") {
+	if ($skills[$i] === "") {
 		continue;
 	}
-	echo($item."<br />");
+	echo($skills[$i]."<br />");
 }
 ?>
