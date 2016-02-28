@@ -51,10 +51,11 @@ if ($name === "" || $pw === "") {
 $character = new Character;
 $character->set_name($name);
 conn_db("password", "game");
-$query = "insert into game_account (name, pw) values (\"".$name."\", password(\"".$pw."\"))";
+$query = "insert into game_account (name, pw, level) values (\"".$name."\", password(\"".$pw."\"), 1)";
 $array_query_result = sql_query($query);
 if ($array_query_result) {
 	header("location: ./index.php");
 	exit;
 }
+mysql_close();
 ?>
