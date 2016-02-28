@@ -5,7 +5,8 @@ function conn_db($pw, $db_name) {
 }
 
 function sql_query($query) {
-	$array_result = @mysql_fetch_array(mysql_query($query)) or die("Query error");
+	$query_exec = @mysql_query($query) or die("query error");
+	$array_result = @mysql_fetch_array($query_exec);
  	return $array_result;
 }
 ?>
