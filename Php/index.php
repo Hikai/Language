@@ -50,6 +50,7 @@ if (!isset($_SESSION["name"]) || !isset($_SESSION["pw"]) || !isset($_SESSION["le
 	echo("<p>level : ".$level."</p>");
 ?>
 		<p><a href="info.php">[INFO]</a></p><br />
+		<p><a href="dungeon.php">[Dungeon]</a></p><br />
 	</body>
 </html>
 <?php
