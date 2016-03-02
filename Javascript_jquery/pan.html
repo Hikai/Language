@@ -4,15 +4,23 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 		<script>
 			$(document).keypress(function(e) {
-				var curr_left = 0;
+				var get_left = $("div.tag_move").css("left");
+				var curr_left = Number(get_left.substr(0, get_left.lastIndexOf("px")));
 				if ((e.which == 68) || (e.which == 100)) {
-					curr_left += 1;
-					$("p.tag_move").css("left", curr_left + "px");
+					curr_left += 10;
+					$("div.tag_move").css("left", curr_left + "px");
+				}
+				if ((e.which == 65) || (e.which == 97)) {
+					if (curr_left == 0) {
+						return;
+					}
+					curr_left -= 10;
+					$("div.tag_move").css("left", curr_left + "px");
 				}
 			});
 		</script>
 	</head>
 	<body class="body">
-		<p class="tag_move" style="left: 1px;">●</p>
+		<div class="tag_move" style="left: 0px; position: relative;">●</div>
 	</body>
 </html>
