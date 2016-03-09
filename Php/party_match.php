@@ -22,4 +22,7 @@ $subject = $_POST["subject"];
 $purpose = $_POST["purpose"];
 $limit_person = $_POST["limit_person"];
 echo("Subject : ".$subject."<br />Purpose : ".$purpose."<br />Limit person : ".$limit_person);
+conn_db("password", "game");
+$query = "insert into game_party_match (id, subject, purpose, limit_person) values (\""."admin"."\", \"".$subject."\", \"".$purpose."\", \"".$limit_person."\")";
+$query_result = sql_query($query);
 ?>
