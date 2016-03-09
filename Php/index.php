@@ -2,9 +2,6 @@
 if (!isset($_SESSION)) {
 	session_start();
 }
-$name = "";
-$pw = "";
-$level = 0;
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -41,16 +38,24 @@ if (!isset($_SESSION["name"]) || !isset($_SESSION["pw"]) || !isset($_SESSION["le
 		$_SESSION["level"] = $level;
 		header("Refresh: 0");
 	}
+	else {
+?>
+<script>
+alert("No id or password");
+</script>
+<?php
+	}
 } else {
 ?>
 	<body>
 		<p>hello</p>
 <?php
-	echo("<p>name : ".$name."</p>");
-	echo("<p>level : ".$level."</p>");
+	echo("<p>name : ".$_SESSION["name"]."</p>");
+	echo("<p>level : ".$_SESSION["level"]."</p>");
 ?>
 		<p><a href="info.php">[INFO]</a></p><br />
-		<p><a href="dungeon.php">[Dungeon]</a></p><br />
+		<p><a href="dungeon.php">[Dungeon]</a></p><br /><br />
+		<p><a href="logout.php">[Logout]</a><br />
 	</body>
 </html>
 <?php
