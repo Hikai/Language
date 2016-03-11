@@ -35,7 +35,33 @@ CREATE TABLE `game_account` (
 
 LOCK TABLES `game_account` WRITE;
 /*!40000 ALTER TABLE `game_account` DISABLE KEYS */;
+INSERT INTO `game_account` VALUES ('admin','*415EFAB75D6CA2AAA08F294861460BE5135226CC',1);
 /*!40000 ALTER TABLE `game_account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `game_party_match`
+--
+
+DROP TABLE IF EXISTS `game_party_match`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `game_party_match` (
+  `id` varchar(100) NOT NULL,
+  `subject` varchar(100) NOT NULL,
+  `purpose` varchar(100) NOT NULL,
+  `limit_person` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `game_party_match`
+--
+
+LOCK TABLES `game_party_match` WRITE;
+/*!40000 ALTER TABLE `game_party_match` DISABLE KEYS */;
+INSERT INTO `game_party_match` VALUES ('admin','abcde','edcba',12);
+/*!40000 ALTER TABLE `game_party_match` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -47,4 +73,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-29  1:36:23
+-- Dump completed on 2016-03-12  2:48:50
