@@ -50,6 +50,7 @@ CREATE TABLE `game_party_match` (
   `id` varchar(100) NOT NULL,
   `subject` varchar(100) NOT NULL,
   `purpose` varchar(100) NOT NULL,
+  `now_person` int(11) NOT NULL,
   `limit_person` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -60,7 +61,7 @@ CREATE TABLE `game_party_match` (
 
 LOCK TABLES `game_party_match` WRITE;
 /*!40000 ALTER TABLE `game_party_match` DISABLE KEYS */;
-INSERT INTO `game_party_match` VALUES ('admin','abcde','edcba',12);
+INSERT INTO `game_party_match` VALUES ('admin','first party','test',1,12);
 /*!40000 ALTER TABLE `game_party_match` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -73,4 +74,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-12  2:48:50
+-- Dump completed on 2016-03-13  3:14:49
