@@ -24,7 +24,8 @@ conn_db("password", "game");
 $query = "select * from game_party_match";
 $query_result = @mysql_query($query) or die("query error");
 while ($array_result = mysql_fetch_array($query_result)) {
-	echo("Name : ".$array_result["name"]."<br />Subject : ".$array_result["subject"]."<br /> Purpose : ".$array_result["purpose"]."<br />".$array_result["now_person"]." / ".$array_result["limit_person"]."<br />");
+	echo("<a href=\"inc.php?name=".$array_result["name"]."&subject=".$array_result["subject"]."&purpose=".$array_result["purpose"]."\">");
+	echo("Name : ".$array_result["name"]."<br />Subject : ".$array_result["subject"]."<br /> Purpose : ".$array_result["purpose"]."<br />".$array_result["now_person"]." / ".$array_result["limit_person"]."<br /></a>");
 
 }
 ?>
