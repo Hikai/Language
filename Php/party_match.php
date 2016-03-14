@@ -24,7 +24,7 @@ conn_db("password", "game");
 $query = "select * from game_party_match";
 $query_result = @mysql_query($query) or die("query error");
 while ($array_result = mysql_fetch_array($query_result)) {
-	echo("ID : ".$array_result["id"]."<br />Subject : ".$array_result["subject"]."<br /> Purpose : ".$array_result["purpose"]."<br />".$array_result["now_person"]." / ".$array_result["limit_person"]."<br />");
+	echo("Name : ".$array_result["name"]."<br />Subject : ".$array_result["subject"]."<br /> Purpose : ".$array_result["purpose"]."<br />".$array_result["now_person"]." / ".$array_result["limit_person"]."<br />");
 
 }
 ?>
@@ -35,6 +35,6 @@ $subject = $_POST["subject"];
 $purpose = $_POST["purpose"];
 $limit_person = $_POST["limit_person"];
 echo("Subject : ".$subject."<br />Purpose : ".$purpose."<br />Limit person : ".$limit_person);
-$query = "insert into game_party_match (id, subject, purpose, limit_person) values (\""."admin"."\", \"".$subject."\", \"".$purpose."\", \"".$limit_person."\")";
+$query = "insert into game_party_match (name, subject, purpose, limit_person) values (\""."admin"."\", \"".$subject."\", \"".$purpose."\", \"".$limit_person."\")";
 $query_result = sql_query($query);
 ?>
