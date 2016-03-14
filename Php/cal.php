@@ -29,6 +29,9 @@ if (!(is_numeric($operand1) && is_numeric($operand2))) {
 	die("No numeric");
 }
 $operator = isset($_POST["operator"]) ? $_POST["operator"] : false;
+if ($operator == false) {
+	exit;
+}
 $result = 0;
 if ($operator == "plus") {
 	$result = plus($operand1, $operand2);
