@@ -47,7 +47,7 @@ DROP TABLE IF EXISTS `game_party_match`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `game_party_match` (
-  `id` varchar(100) NOT NULL,
+  `name` varchar(100) NOT NULL,
   `subject` varchar(100) NOT NULL,
   `purpose` varchar(100) NOT NULL,
   `now_person` int(11) NOT NULL,
@@ -74,4 +74,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-13  3:14:49
+-- Dump completed on 2016-03-14 21:20:06
