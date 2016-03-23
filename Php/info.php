@@ -14,5 +14,7 @@ $query_result = sql_query($query);
 if (empty($query_result)) {
 	exit;
 }
-echo("Attack : ".$query_result["attack"]."<br />Defence : ".$query_result["defence"]."<br />Critical : ".$query_result["critical"]."<br />Avoid : ".$query_result["avoid"]);
+$user = new User_Char ($_SESSION["level"], $query_result["attack"], $query_result["avoid"], $query_result["critical"], $query_result["defence"]);
+echo("Attack : ".$user->get_attk()."<br />Defence : ".$user->get_defen()."<br />Critical : ".$user->get_cri()."<br />Avoid : ".$user->get_avoid());
+unset($user);
 ?>
