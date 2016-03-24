@@ -2,6 +2,7 @@
 // avoid, critical = percentage.
 class Mob {
 	private $mob_attk = 0, $mob_avoid = 0, $mob_cri = 0, $mob_defen = 0, $mob_hp = 0;
+	private $mob_skill = array();
 	function __construct($user_level) {
 		$this->mob_attk = $user_level * 1.5;
 		$this->mob_avoid = mt_rand(0, 100);
@@ -19,6 +20,9 @@ class Mob {
 	}
 	function get_hp() {
 		return $this->mob_hp;
+	}
+	function set_skill($set_skill_array) {
+		$this->mob_skill = $set_skill_array;
 	}
 }
 
@@ -44,6 +48,9 @@ class User_Char {
 	function get_hp() {
 		return $this->user_hp;
 	}
+	function set_skill($set_skill_array) {
+		$this->user_skill = $set_skill_array;
+	}
 }
 
 function conn_db($pw, $db_name) {
@@ -56,4 +63,7 @@ function sql_query($query) {
 	$array_result = @mysql_fetch_array($query_exec);
  	return $array_result;
 }
+
+$mob_particular_skills = array("1", "2", "3");
+$user_common_skills = array("1", "2", "3");
 ?>
