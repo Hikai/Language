@@ -4,6 +4,8 @@ class Mob {
 	private $mob_attk = 0, $mob_avoid = 0, $mob_cri = 0, $mob_defen = 0, $mob_hp = 0;
 	function __construct($user_level) {
 		$this->mob_attk = $user_level * 1.5;
+		$this->mob_avoid = mt_rand(0, 100);
+		$this->mob_cri = mt_rand(0, 100);
 		$this->mob_defen = $user_level;
 		$this->mob_hp = mt_rand($user_level, $user_level * 10);
 	}
