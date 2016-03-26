@@ -1,6 +1,6 @@
 fn heap_allocate(value: i32) -> Box<i32> {
 	let alloc = Box::new(value);
-	return alloc;
+	alloc // same (return alloc;)
 }
 
 fn main() {
