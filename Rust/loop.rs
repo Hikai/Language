@@ -14,4 +14,7 @@ fn main() {
         i += 1;
     }
     println!("Sum : {}", sum);
+    for j in 0..10 {
+        println!("{}", j);
+    }
 }
