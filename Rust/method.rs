@@ -16,6 +16,12 @@ impl Char {
     }
 }
 
+impl Drop for Char {
+    fn drop(&mut self) {
+        println!("drop");
+    }
+}
+
 fn main() {
     let a = Char { hp: 100, mp: 50, attk: 10};
     println!("{}, {}, {}", a.get_hp(), a.get_mp(), a.get_attk());
