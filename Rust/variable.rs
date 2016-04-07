@@ -5,7 +5,9 @@ fn main() {
 	let e = 5; // e is not change.
 	let mut f = 6; // f able change.
 	println!("{}, {}, {}, {}, {}, {}", a, b, c, d, e, f);
+	f = 7;
 	let g = &mut f;
-	g += 1;
-	println!("{}", f);
+	println!("{}", g);
+	let tuples = ((1, 2, 3), (4, 5, 6));
+	println!("{:?}", tuples);
 }
