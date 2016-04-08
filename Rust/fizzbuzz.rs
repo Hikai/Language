@@ -12,8 +12,12 @@ fn main() {
     // }
     
     for i in 1..101 {
-        match i % 3 {
-            0 => println!("fizz"),
+        // match i % 3 {
+        //     0 => println!("fizz"),
+        //     _ => println!("{}", i)
+        // }
+        match i % 5 {
+            0 => println!("buzz"),
             _ => println!("{}", i)
         }
     }
