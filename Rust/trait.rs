@@ -3,7 +3,7 @@ struct A {
     y: i32,
 }
 
-trait Test {
+trait Test { // function prototype declaration
     fn multi(&self) -> i32;
 }
 
