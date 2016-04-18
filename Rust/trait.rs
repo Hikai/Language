@@ -7,7 +7,7 @@ trait Test { // function prototype declaration
     fn multi(&self) -> i32;
 }
 
-impl Test for A {
+impl Test for A { // function definition
     fn multi(&self) -> i32 {
         self.x * self.y
     }
