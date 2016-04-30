@@ -1,6 +1,13 @@
 fn main() {
     let a = 10;
+    let mut b = 1;
     match a {
-        ref b => println!("a : {}", b),
+        ref c => println!("a : {}", c),
+    }
+    match b {
+    	ref mut d => {
+    		*d += 1;
+    		println!("b : {}", d);
+    	},
     }
 }
