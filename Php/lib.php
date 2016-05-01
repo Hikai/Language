@@ -85,4 +85,17 @@ function get_page_prev($page_get) {
   }
   return $page_prev;
 }
+function alphabet_upper($str) {
+  for ($i = 0; $i < strlen($str); $i++) {
+    $tmp = ord($str[$i]);
+    if (!(97 <= $tmp <= 122)) {
+      continue;
+    }
+    else {
+      $up = $tmp - 32;
+      $str[$i] = chr($up);
+    }
+  }
+  return $str;
+}
 ?>
