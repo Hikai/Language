@@ -98,4 +98,17 @@ function alphabet_upper($str) {
   }
   return $str;
 }
+function alphabet_lower($str) {
+  for ($i = 0; $i < strlen($str); $i++) {
+    $tmp = ord($str[$i]);
+    if (!(65 <= $tmp <= 90)) {
+      continue;
+    }
+    else {
+      $low = $tmp + 32;
+      $str[$i] = chr($low);
+    }
+  }
+  return $str;
+}
 ?>
