@@ -6,10 +6,24 @@ for ($i = 65; $i < 123; $i++) {
         $i = 96;
         continue;
     }
-    $array_fre += Array(chr($i) => "");
+    $array_fre += Array(chr($i) => 0);
 }
 for ($j = 0; $j < strlen($str); $j++) {
-    echo(ord($str[$j]));
+    for ($k = 65; $k < 123; $k++) {
+        if ($k == 91) {
+            $k = 96;
+            continue;
+        }
+        if (ord($str[$j]) == $k) {
+            $array_fre[chr($k)]++;
+        }
+    }
 }
-var_dump($array_fre);
+echo("\n");
+foreach ($array_fre as $key => $value) {
+    if ($value === 0) {
+        continue;
+    }
+    echo($key." => ".$value."\n");
+}
 ?>
