@@ -1,5 +1,12 @@
 <?php
-include("lib.php");
+function desc_array_sort($array)
+{
+    if (!is_array($array)) {
+        return;
+    }
+    arsort($array);
+    return $array;
+}
 function alphabet_frequency($str)
 {
     if (!is_string($str)) {
@@ -7,11 +14,10 @@ function alphabet_frequency($str)
     }
     $array_fre = Array();
     for ($i = 0; $i < strlen($str); $i++) {
-        for ($j = 65; $j < 123; $j++) {
-            if ($j == 91) {
-                $j = 96;
-                continue;
-            }
+        if (ord($str[$i]) < 97) {
+            $str[$i] = chr(ord($str[$i]) + 32);
+        }
+        for ($j = 97; $j < 123; $j++) {
             if (ord($str[$i]) == $j) {
                 if (!isset($array_fre[chr($j)])) {
                     $array_fre += Array(chr($j) => 1);
@@ -28,7 +34,9 @@ function alphabet_frequency($str)
     foreach ($array_fre as $key => $value) {
         echo($key." => ".$value." (".number_format(($value / $str_leng * 100), 2)." %)\n");
     }
+    return $array_fre;
 }
-$str = "aaaaabccccdd";
-alphabet_frequency($str);
+$str = "aaaaabccccddABCD";
+$fre = alphabet_frequency($str);
+var_dump($fre);
 ?>
