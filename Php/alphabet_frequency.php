@@ -1,29 +1,40 @@
 <?php
-$str = "asdfasdfasdfasdf";
-$array_fre = Array();
-for ($i = 65; $i < 123; $i++) {
-    if ($i == 91) {
-        $i = 96;
-        continue;
+function desc_array_sort($array)
+{
+    if (!is_array($array)) {
+        return;
     }
-    $array_fre += Array(chr($i) => 0);
+    arsort($array);
+    return $array;
 }
-for ($j = 0; $j < strlen($str); $j++) {
-    for ($k = 65; $k < 123; $k++) {
-        if ($k == 91) {
-            $k = 96;
-            continue;
+function alphabet_frequency($str)
+{
+    if (!is_string($str)) {
+        return;
+    }
+    $array_fre = Array();
+    for ($i = 0; $i < strlen($str); $i++) {
+        for ($j = 65; $j < 123; $j++) {
+            if ($j == 91) {
+                $j = 96;
+                continue;
+            }
+            if (ord($str[$i]) == $j) {
+                if (!isset($array_fre[chr($j)])) {
+                    $array_fre += Array(chr($j) => 1);
+                }
+                else {
+                    $array_fre[chr($j)]++;
+                }
+            }
         }
-        if (ord($str[$j]) == $k) {
-            $array_fre[chr($k)]++;
-        }
+    }
+    echo("\n");
+    $array_fre = desc_array_sort($array_fre);
+    foreach ($array_fre as $key => $value) {
+        echo($key." => ".$value."\n");
     }
 }
-echo("\n");
-foreach ($array_fre as $key => $value) {
-    if ($value === 0) {
-        continue;
-    }
-    echo($key." => ".$value."\n");
-}
+$str = "aaaaabccccdd";
+alphabet_frequency($str);
 ?>
