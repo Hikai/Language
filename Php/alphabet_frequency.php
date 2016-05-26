@@ -31,8 +31,9 @@ function alphabet_frequency($str)
     }
     echo("\n");
     $array_fre = desc_array_sort($array_fre);
+    $str_leng = strlen($str);
     foreach ($array_fre as $key => $value) {
-        echo($key." => ".$value."\n");
+        echo($key." => ".$value." (".number_format(($value / $str_leng * 100), 2)." %)\n");
     }
 }
 $str = "aaaaabccccdd";
