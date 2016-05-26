@@ -111,4 +111,12 @@ function alphabet_lower($str) {
   }
   return $str;
 }
+function desc_array_sort($array)
+{
+    if (!is_array($array)) {
+        return;
+    }
+    arsort($array);
+    return $array;
+}
 ?>
