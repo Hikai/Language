@@ -1,12 +1,5 @@
 <?php
-function desc_array_sort($array)
-{
-    if (!is_array($array)) {
-        return;
-    }
-    arsort($array);
-    return $array;
-}
+inclued("lib.php");
 function alphabet_frequency($str)
 {
     if (!is_string($str)) {
