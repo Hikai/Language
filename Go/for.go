@@ -13,4 +13,11 @@ func main() {
 		fmt.Println(j)
 		j++
 	}
+	k := 0
+	for {
+		if k == 10 {
+			break
+		}
+		k++
+	}
 }
