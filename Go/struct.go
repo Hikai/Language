@@ -15,4 +15,6 @@ func main() {
 	a.a = 4
 	a.b = 6
 	fmt.Println(a.a, a.b)
+	b := &a
+	fmt.Println(b)
 }
