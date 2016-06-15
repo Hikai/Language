@@ -17,4 +17,6 @@ func main() {
 	fmt.Println(a.a, a.b)
 	b := &a
 	fmt.Println(b)
+	c := new(Quad)
+	fmt.Println(c)
 }
