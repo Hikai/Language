@@ -10,4 +10,6 @@ func main() {
 	a["b"] = 2
 	fmt.Println(a, len(a))
 	fmt.Println(a["a"], a["b"])
+	delete(a, "a")
+	fmt.Println(a, len(a))
 }
