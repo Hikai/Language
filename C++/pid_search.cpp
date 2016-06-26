@@ -15,8 +15,10 @@ int main(void)
 	std::cin >> pid;
 	if (HANDLE proc_handle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid)) {
 		if (GetModuleFileNameEx(proc_handle, 0, proc_name, MAX_NAME)) {
+			std::cout << "Process name : " << proc_name << std::endl;
 		}
 		else {
+			std::cout << "Error" << std::endl;
 		}
 		CloseHandle(proc_handle);
 	}
