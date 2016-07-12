@@ -74,6 +74,7 @@ def main():
     node3.set_parent(node1)
     node1.add_child(node2, node3)
     print(node1.get_child_data())
+    print(node2.get_parent_data())
     del node3
     del node2
     del node1
