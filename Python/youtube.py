@@ -13,7 +13,10 @@ def main():
     keyword = 'utaite'
     url = 'https://www.youtube.com/results?search_query={}'.format(keyword)
     soup_ytb = BeautifulSoup(requests.get(url).text, "lxml")
-    print(soup_ytb.soup_ytb)
+    list_h3 = soup_ytb.findAll("h3", {"class": "yt-lockup-title"})
+    for item in list_h3:
+        print(item.text)
+        print(item['class'])
 
 
 if __name__ == "__main__":
