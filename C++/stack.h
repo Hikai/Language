@@ -6,17 +6,17 @@
 
 class Stack{
 private:
-    int * store = { 0, };
+	int * store = { 0, };
 public:
 	Stack() {
 
-    }
-    ~Stack() {
-        store = { 0, };
-    }
-    int * get_data(void);
+	}
+	~Stack() {
+		store = { 0, };
+	}
+	int * get_data(void);
 	void push(int);
-	void pop(int);
+	void pop(void);
 };
 
 #endif
