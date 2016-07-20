@@ -7,10 +7,15 @@ int * Stack::get_data(void)
 
 void Stack::push(int data)
 {
-    // store.append(data)
+    store.push_back(data)
 }
 
 void Stack::pop(void)
 {
-    // store.pop();
+    store.pop_back()
+}
+
+void Stack::check_size(void)
+{
+    // 100 check
 }
