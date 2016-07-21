@@ -1,6 +1,6 @@
 #include "stack.h"
 
-int * Stack::get_data(void)
+vector<int> Stack::get_data(void)
 {
     return store;
 }
@@ -17,5 +17,7 @@ void Stack::pop(void)
 
 void Stack::check_size(void)
 {
-    // 100 check
+    if (store.size >= 99) {
+        return
+    } 
 }
