@@ -7,6 +7,7 @@ vector<int> Stack::get_data(void)
 
 void Stack::push(int data)
 {
+    check_size()
     store.push_back(data)
 }
 
