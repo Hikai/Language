@@ -21,13 +21,17 @@ else { // Failed login or not login print html.
     <form action="" method="post">
         <table border="0">
             <tbody>
-                <td>Character name:</td>
-                <td><input name="name" type="text" /></td>
-                <td>password:</td>
-                <td><input name="pw" type="password" /></td>
-                <td>confirm pw: </td>
-                <td><input name="cfm_pw" type="password" /></td>
-                <td><input type="submit" /></td>
+                <tr>
+                    <td>Character name:</td>
+                    <td><input name="name" type="text" /></td>
+                </tr>
+                <tr>
+                    <td>password:</td>
+                    <td><input name="pw" type="password" /></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" /></td>
+                </tr>
             </tbody>
         </table>
     </form>
@@ -38,14 +42,10 @@ else { // Failed login or not login print html.
 </html>
 <?php
 // Login procedure.
-if (!isset($_POST["name"]) || !isset($_POST["pw"]) || !isset($_POST["cfm_pw"])) {
+if (!isset($_POST["name"]) || !isset($_POST["pw"])) {
     exit();
 }
 else {
-    if ($_POST["pw"] != $_POST["cfm_pw"]) {
-        echo("<script>alert(\"Password not equal confirm password\");</script>");
-        exit();
-    }
     // include("lib.php");
     $name = $_POST["name"];
     $pw = $_POST["pw"];
