@@ -14,6 +14,9 @@ if (!isset($_SESSION)) { // Session check.
 if (!isset($_SESSION["name"]) || !isset($_SESSION["pw"])) { // Success login print html.
 ?>
     <p>Hello</p>
+    <p>[Menu]</p>
+    <p onclcik="">Status</p>
+    <p onclick="">Party</p>
 <?php
 }
 else { // Failed login or not login print html.
