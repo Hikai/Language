@@ -15,8 +15,8 @@ if (!isset($_SESSION["name"]) || !isset($_SESSION["pw"])) { // Success login pri
 ?>
     <p>Hello</p>
     <p>[Menu]</p>
-    <p onclcik="">Status</p>
-    <p onclick="">Party</p>
+    <p onclcik="status.php">Status</p>
+    <p onclick="party_list.php">Party</p>
 <?php
 }
 else { // Failed login or not login print html.
