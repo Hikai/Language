@@ -10,5 +10,8 @@ if (!isset($_SESSION)) { // Session check.
 </head>
 <body>
     <p>[Status]</p>
+<?php
+include("lib.php")
+?>
 </body>
 </html>

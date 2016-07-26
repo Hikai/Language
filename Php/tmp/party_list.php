@@ -11,6 +11,10 @@ if (!isset($_SESSION)) { // Session check.
 <body>
     <p>[Party list]</p>
     <br />
+<?
+// List.
+?>
+    <br />
     <p onclick="">Create party</p>
 </body>
 </html>
