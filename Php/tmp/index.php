@@ -11,15 +11,18 @@ if (!isset($_SESSION)) { // Session check.
 </head>
 <body>
 <?php
-if (!isset($_SESSION["name"]) || !isset($_SESSION["pw"])) { // Success login print html.
+// Success login print html.
+if (!isset($_SESSION["name"]) || !isset($_SESSION["pw"])) {
+    echo("<p>Hello "/* Character name. */."</p>");
 ?>
-    <p>Hello</p>
     <p>[Menu]</p>
-    <p onclcik="status.php">Status</p>
-    <p onclick="party_list.php">Party</p>
+    <p onclcik="status.php" style="color: blue;">Status</p>
+    <!--<p onclick="party_list.php">Party</p>-->
+    <p onclick="test_dg.php" style="color: blue;">test</p>
 <?php
 }
-else { // Failed login or not login print html.
+// Failed login or not login print html.
+else {
 ?>
     <form action="" method="post">
         <table border="0">
