@@ -3,6 +3,7 @@ class Player { // Player class.
     private $attack = 0, $condition_value = 0, $critical = 0, $defence = 0;
     private $level = 0;
     private $current_weapon = "", $current_armor = "";
+    private $party = false, $party_name = "";
     function __construct()
     {
         // DB connect, get level, attack, condition, crtical, defence.
@@ -66,6 +67,11 @@ class Player { // Player class.
         set_condition($armor->get_condition());
         set_defence($armor->get_defence());
     }
+    function set_party($party_bool, $party_name)
+    {
+        $this->party = $party_bool;
+        $this->party_name = $party_name;
+    } 
 }
 
 // All weapon class.
@@ -144,4 +150,6 @@ function sqli_close($conn)
 {
     $conn->close();
 }
+
+$arr_party = Array();
 ?>
