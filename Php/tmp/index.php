@@ -10,13 +10,21 @@ if (!isset($_SESSION)) { // Session check.
     <title>game</title>
 </head>
 <body>
+    <p>[Status]</p>
+    <br />
 <?php
 // Success login print html.
 if (!isset($_SESSION["name"]) || !isset($_SESSION["pw"])) {
+    include("lib.php")
     echo("<p>Hello "/* Character name. */."</p>");
+    $player = new Player();
+    echo($player->get_attack()."<br />");
+    echo($player->get_defence()."<br />");
+    echo($player->get_critical()."<br />");
+    echo($player->get_condition()."<br />");
+    unset($player);
 ?>
     <p>[Menu]</p>
-    <p onclcik="status.php" style="color: blue;">Status</p>
     <!--<p onclick="party_list.php">Party</p>-->
     <p onclick="test_dg.php" style="color: blue;">test</p>
 <?php
