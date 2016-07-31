@@ -4,9 +4,13 @@ class Player { // Player class.
     private $level = 0;
     private $current_weapon = "", $current_armor = "";
     private $party = false, $party_name = "";
-    function __construct()
+    function __construct($conn)
     {
-        // DB connect, get level, attack, condition, crtical, defence.
+        $str_query = "";
+        $result_char = exec_query($conn, $str_query);
+        while($rows = $result_char->fetch_object()) {
+            // Process data.
+        }
     }
     function __destruct()
     {
@@ -141,9 +145,10 @@ function sqli_conn($server, $username, $pass)
 
 function exec_query($conn, $sql)
 {
-    if ($conn->query($sql) === false) {
+    if (($result = $conn->query($sql)) === false) {
         die("Query error");
     }
+    return $result;
 }
 
 function sqli_close($conn)
