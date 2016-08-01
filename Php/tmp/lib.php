@@ -14,7 +14,15 @@ class Player { // Player class.
     }
     function __destruct()
     {
-        // DB connect, status save.
+        $conn = sqli_conn($server, $username, $pw);
+        $str_query = "";
+        $result = exec_query($conn, $str_query);
+        if ($result) {
+            exit();
+        }
+        else {
+            // Mysqli error.
+        }
     }
     function inc_level()
     {
@@ -134,9 +142,9 @@ class Armor {
     }
 }
 
-function sqli_conn($server, $username, $pass)
+function sqli_conn($server, $username, $pw)
 {
-    $conn = new mysqli($server, $username, $pass);
+    $conn = new mysqli($server, $username, $pw);
     if ($conn->connect_error) {
         die("Connect failed");
     }
@@ -156,5 +164,11 @@ function sqli_close($conn)
     $conn->close();
 }
 
+// Party list array.
 $arr_party = Array();
+
+//DB connect info.
+$server = "server";
+$username = "username";
+$pw = "password";
 ?>
