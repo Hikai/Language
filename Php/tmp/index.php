@@ -16,8 +16,9 @@ if (!isset($_SESSION)) { // Session check.
 // Success login print html.
 if (!isset($_SESSION["name"]) || !isset($_SESSION["pw"])) {
     include("lib.php")
+    $conn = sqli_conn($server, $username, $pw);
     echo("<p>Hello "/* Character name. */."</p>");
-    $player = new Player();
+    $player = new Player($conn);
     echo($player->get_attack()."<br />");
     echo($player->get_defence()."<br />");
     echo($player->get_critical()."<br />");
