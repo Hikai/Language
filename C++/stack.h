@@ -16,7 +16,7 @@ public:
 	~Stack() {
 		store = { 0, };
 	}
-	int * get_data(void);
+	vector<T> get_data(void);
 	void push(T);
 	void pop(void);
     void check_size(void);
