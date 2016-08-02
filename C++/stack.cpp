@@ -1,11 +1,13 @@
 #include "stack.h"
 
-vector<int> Stack::get_data(void)
+template <typename T>
+vector<T> Stack::get_data(void)
 {
     return store;
 }
 
-void Stack::push(int data)
+template <typename T>
+void Stack::push(T data)
 {
     check_size()
     store.push_back(data)
