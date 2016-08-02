@@ -5,9 +5,10 @@
 #include <iostream>
 #include <vector>
 
+template <typename T>
 class Stack{
 private:
-	vector<int> store(100);
+	vector<T> store(100);
 public:
 	Stack() {
 
@@ -16,7 +17,7 @@ public:
 		store = { 0, };
 	}
 	int * get_data(void);
-	void push(int);
+	void push(T);
 	void pop(void);
     void check_size(void);
 };
