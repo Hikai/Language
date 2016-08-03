@@ -19,11 +19,14 @@ if (!isset($_SESSION["name"]) || !isset($_SESSION["pw"])) {
     $conn = sqli_conn($server, $username, $pw);
     echo("<p>Hello "/* Character name. */."</p>");
     $player = new Player($conn);
+    if ($player->get_level() == 1) {
+        $player->set_weapon($sword);
+    }
     echo($player->get_attack()."<br />");
     echo($player->get_defence()."<br />");
     echo($player->get_critical()."<br />");
     echo($player->get_condition()."<br />");
-    unset($player);
+    $player = NULL; // Call Player class destructor.
 ?>
     <p>[Menu]</p>
     <!--<p onclick="party_list.php">Party</p>-->
