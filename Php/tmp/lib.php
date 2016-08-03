@@ -18,7 +18,7 @@ class Player { // Player class.
         $str_query = "";
         $result = exec_query($conn, $str_query);
         if ($result) {
-            exit();
+            // Refresh page.
         }
         else {
             // Mysqli error.
@@ -47,6 +47,10 @@ class Player { // Player class.
     function get_defence()
     {
         return $this->defence;
+    }
+    function get_level()
+    {
+        return $this->level;
     }
     function set_attack($attack)
     {
@@ -167,8 +171,11 @@ function sqli_close($conn)
 // Party list array.
 $arr_party = Array();
 
-//DB connect info.
+// DB connect info.
 $server = "server";
 $username = "username";
 $pw = "password";
+
+// Weapon
+$sword = new Weapon(5, 0, 0, "Sword");
 ?>
