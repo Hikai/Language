@@ -68,7 +68,7 @@ def get_now_path():
 
 def main(filename):
     """Main function."""
-    path = get_now_path()
+    path = get_now_path() + "\\{}\\".format(filename)
     makedir(path + "\\templates\\")
     makedir(path + "\\static\\")
     makefile(path + filename + ".py")
