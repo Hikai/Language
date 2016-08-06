@@ -3,23 +3,56 @@
 #define _STACK_H_
 
 #include <iostream>
-#include <vector>
 
 template <typename T>
-class Stack{
+class Stack {
 private:
-	vector<T> store(100);
+	T store;
 public:
-	Stack() {
-
-	}
-	~Stack() {
-		store = { 0, };
-	}
-	vector<T> get_data(void);
+	Stack();
+	~Stack();
+	T get_data(void);
 	void push(T);
 	void pop(void);
-    void check_size(void);
+	//void check_size(void);
 };
+
+template <typename T>
+Stack<T>::Stack()
+{
+	this->store = NULL;
+}
+
+template <typename T>
+Stack<T>::~Stack()
+{
+	this->store = NULL;
+}
+
+template <typename T>
+T Stack<T>::get_data(void)
+{
+	return store;
+}
+
+template <typename T>
+void Stack<T>::push(T data)
+{
+	this->store = data;
+}
+
+template <typename T>
+void Stack<T>::pop(void)
+{
+	this->store = NULL;
+}
+
+//template <typename T>
+//void Stack<T>::check_size(void)
+//{
+//	if (store.size >= 99) {
+//		return;
+//	}
+//}
 
 #endif
