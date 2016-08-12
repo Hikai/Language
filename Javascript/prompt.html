@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>js + php</title>
+    <script>
+        function test_prompt() {
+            var a = prompt("Input");
+            if (a != null) {
+                document.getElementById("test").value = a;
+                document.getElementById("frm").submit();
+            }
+        }
+    </script>
+</head>
+<body>
+    <button onclick="test_prompt()">Click</button>
+    <form action="act_prompt.php" method="post" id="frm">
+        <input type="hidden" name="test" id="test" />
+    </form>
+</body>
+</html>
