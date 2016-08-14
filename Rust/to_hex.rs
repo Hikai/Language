@@ -39,6 +39,20 @@ fn alphabet_match_lower (hex: u32) -> String {
     alphabet
 }
 
+fn alphabet_match_upper (hex: u32) -> String {
+    let alphabet = match hex {
+        10 => "A".to_string(),
+        11 => "B".to_string(),
+        12 => "C".to_string(),
+        13 => "D".to_string(),
+        14 => "E".to_string(),
+        15 => "F".to_string(),
+        _ => hex.to_string(),
+    };
+
+    alphabet
+}
+
 fn main() {
     let a = "abcde";
     let mut vec_hex = Vec::new();
