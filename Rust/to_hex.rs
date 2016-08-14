@@ -3,28 +3,17 @@ fn to_hex (chr: u32) -> String {
     let mut vec_hex = Vec::new();
     let mut str_result = String::new();
 
-    if chr >= 16 {
-        loop {
-            
-            if chr <= 15 {
-                break;
-            }
-            
-            vec_hex.push(alphabet_match_lower(hex_operand % 16));
-            
-            hex_operand /= 16;
-            if hex_operand > 15 {
-                continue;
-            }
-            else {
-                vec_hex.push(alphabet_match_lower(hex_operand));
-                break;
-            }
+    loop {
+        vec_hex.push(alphabet_match_lower(hex_operand % 16));
+        hex_operand /= 16;
 
+        if hex_operand > 15 {
+            continue;
         }
-    }
-    else {
-        vec_hex.push(alphabet_match_lower(hex_operand));
+        else {
+            vec_hex.push(alphabet_match_lower(hex_operand));
+            break;
+        }
     }
 
     vec_hex.reverse();
