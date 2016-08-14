@@ -48,15 +48,11 @@ fn alphabet_match (hex: u32) -> String {
 }
 
 fn main() {
-    // let a = "abcde";
-    // let mut vec = Vec::new();
     let a = 63;
     let vec = to_hex(a as u32);
-    // for c in a.chars() {
-    //     print!("{} ", to_hex(c as u32));
-    //     vec.push(c as u32);
-    // }
+    
     print!("{} hex -> ", a);
+    
     for v in vec {
         print!("{}", v);
     }
