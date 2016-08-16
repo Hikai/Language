@@ -1,20 +1,50 @@
-use std::error::Error;
+use std::env;
+use std::ffi::OsStr;
 use std::fs::File;
-use std::io::prelude::*;
+use std::io::Read;
 use std::path::Path;
 
+// thruput
+// fn str_to_ref_osstr<'a>(arg: &'a String) -> &'a OsStr {
+//     let ref_str: &str = arg.as_ref();
+//     let ref_osstr: &OsStr = OsStr::new(ref_str);
+
+//     return ref_osstr
+// }
+
+fn file_read(ref_path: &OsStr) -> [u8; 1024] {
+    let mut byte_store = [0u8; 1024];
+
+    let path = Path::new(ref_path);
+    let mut file = File::open(&path).unwrap();
+    file.read(&mut byte_store).unwrap();
+
+    return byte_store;
+}
+
 fn main() {
-    let path = Path::new("a.txt");
-    let display = path.display();
+    let args: Vec<_> = env::args().collect();
 
-    let mut file = match File::open(&path) {
-        Err(log) => panic!("failed to open: {}\n -> {}", display, log.description()),
-        Ok(file) => file,
-    };
+    if args.len() != 2 {
+        println!("Usage: binary_open.exe [filename]");
+        std::process::exit(1);
+    }
 
-    let mut content = String::new();
-    match file.read_to_string(&mut content) {
-        Err(log) => panic!("failed to read: {}\n -> {}", display, log.description()),
-        Ok(_) => print!("{}\n\n{}", display, content),
-    };
+    let ref_str: &str = args[1].as_ref();
+    let ref_osstr: &OsStr = OsStr::new(ref_str);
+
+    let store = file_read(ref_osstr);
+
+    let mut count = 0;
+    for byte in store.iter() {
+        print!("{:3} ", byte);
+        if count >= 7 {
+            println!("");
+
+            count = 0;
+        }
+        else {
+            count += 1;
+        }
+    }
 }
