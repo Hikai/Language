@@ -15,7 +15,7 @@ fn alphabet_match_upper (hex: u8) -> String {
         _ => hex.to_string(),
     };
 
-    alphabet
+    return alphabet;
 }
 
 fn file_read(ref_path: &OsStr) -> [u8; 1024] {
@@ -33,7 +33,7 @@ fn file_read(ref_path: &OsStr) -> [u8; 1024] {
 //     let ref_str: &str = arg.as_ref();
 //     let ref_osstr: &OsStr = OsStr::new(ref_str);
 
-//     return ref_osstr
+//     return ref_osstr;
 // }
 
 fn to_hex (chr: u8) -> String {
@@ -60,7 +60,7 @@ fn to_hex (chr: u8) -> String {
         str_result.push_str(item.as_ref());
     }
     
-    str_result
+    return str_result;
 }
 
 fn main() {
