@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Github commit table parsing.
+Github today commit check.
 
 Todo:
+ - iOS push.
+ - Discord.
 """
 from bs4 import BeautifulSoup
 from time import localtime, strftime
