@@ -21,10 +21,10 @@ def main(user_id):
     """Main function."""
     req = requests.get('https://www.github.com/{}/'.format(user_id)).text
     soup_git = BeautifulSoup(req, "lxml")
-    rect = soup_git.findAll("rect", {"data-date": get_today()})
-    re_data = "data-count=\"(.*)\""
-    regex = re.findall(re_data, str(rect))
-    print(str(regex)[2])
+    rect = soup_git.findAll("rect", {"data-date": get_today()})[0]
+    re_data = "<rect (?:.*) data-count=\"(.*)\" data-date(?:.*)"
+    regex = re.findall(re_data, str(rect))[0]
+    print("Count: {}".format(regex))
 
 if __name__ == "__main__":
     main("hikillhikai")
