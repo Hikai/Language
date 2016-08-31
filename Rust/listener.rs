@@ -1,12 +1,17 @@
-use std::io::Read;
-use std::io::Write;
+use std::io::{Read, Write, BufReader, BufRead};
 use std::net::{TcpListener, TcpStream};
 use std::thread;
 
-fn handle_client(mut stream: TcpStream) {
-    let mut buf = [0u8, 255];
-    let buf_read = stream.read(&mut buf).unwrap();
-    stream.write_all(b"hello world").unwrap();
+fn handle_client(stream: TcpStream) {
+    let mut reader = BufReader::new(stream);
+    for line in reader.by_ref().lines() {
+        if line.unwrap() == "" {
+            break;
+        }
+    }
+
+    println!("{:?}", reader);
+    reader.into_inner().write_all(b"abcd").unwrap();
 }
 
 fn main() {
@@ -15,7 +20,6 @@ fn main() {
         match stream {
             Err(log) => println!("{:?}", log),
             Ok(mut stream) => {
-                stream.write_all(b"Connected\n\n").unwrap();
                 thread::spawn(move || {
                     handle_client(stream);
                 });
