@@ -5,14 +5,8 @@ use std::thread;
 
 fn handle_client(mut stream: TcpStream) {
     let mut buf = [0u8, 255];
-    loop {
-        let buf_read = stream.read(&mut buf).unwrap();
-        if buf_read == 0 {
-            break;
-        }
-        println!("{:?}", buf);
-        stream.write_all(&buf).unwrap();
-    }
+    let buf_read = stream.read(&mut buf).unwrap();
+    stream.write_all(b"hello world").unwrap();
 }
 
 fn main() {
