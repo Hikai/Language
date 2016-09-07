@@ -16,7 +16,7 @@ fn add_padding_encode(str_plain: &str) -> Vec<char>{
     vec_chr
 }
 
-fn base64_encode(str_plain: &str) {
+fn base64_encode(str_plain: &str) -> String {
     let mut index = 0;
     let mut str_tmp = String::new();
     let mut str_result = String::new();
@@ -33,7 +33,7 @@ fn base64_encode(str_plain: &str) {
         str_result.push_str(&(three_bytes_encode(&str_tmp)));
     }
 
-    println!("{}", str_result);
+    str_result
 }
 
 fn matching_table(base64_code: usize) -> char {
@@ -112,6 +112,5 @@ fn to_64(str_plain: &str, value_256: u32) -> Vec<u32> {
 
 fn main() {
     let plain = "abcd";
-    // println!("{}", base64_encode(&plain));
-    base64_encode(&plain);
+    println!("{}", base64_encode(&plain));
 }
