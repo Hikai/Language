@@ -29,8 +29,8 @@ def main():
     """Main."""
     oauth = OAuth(ACCESS_TOKEN, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
     twitt = Twitter(auth=oauth)
-    list_foler = get_dumps(twitt.followers.list(screen_name="applemelon1101"))
-    # list_foloi = json.dumps(twitt.friends.list(screen_name="applemelon1101"))
+    list_foler = get_dumps(twitt.followers.list(screen_name="user_id"))
+    # list_foloi = json.dumps(twitt.friends.list(screen_name="user_id"))
     for user in get_loads(list_foler)['users']:
         print(user)
 
