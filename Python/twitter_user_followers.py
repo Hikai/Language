@@ -25,14 +25,32 @@ def get_loads(json_dumps):
     return json.loads(json_dumps)
 
 
-def main():
+def print_followers(json_data, twit_id):
+    """Print follwers information."""
+    users = get_dumps(json_data)
+    print("{} followings: ".format(twit_id))
+    for user in get_loads(users)["users"]:
+        print(" - User name: {}".format(user["screen_name"]))
+        # name, description, id
+
+
+def print_friends(json_data, twit_id):
+    """Print Friends information."""
+    users = get_dumps(json_data)
+    print("{} followings: ".format(twit_id))
+    for user in get_loads(users)["users"]:
+        print(" - User name: {}".format(user["screen_name"]))
+        # name, description, id
+
+
+def main(twit_id):
     """Main."""
     oauth = OAuth(ACCESS_TOKEN, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
-    twitt = Twitter(auth=oauth)
-    list_foler = get_dumps(twitt.followers.list(screen_name="user_id"))
-    # list_foloi = json.dumps(twitt.friends.list(screen_name="user_id"))
-    for user in get_loads(list_foler)['users']:
-        print(user)
+    twit = Twitter(auth=oauth)
+    followers = twit.followers.list(screen_name=twit_id, count=200)
+    friends = twit.friends.list(screen_name=twit_id, count=200)
+    print_followers(followers, twit_id)
+    print_friends(friends, twit_id)
 
 if __name__ == "__main__":
-    main()
+    main("user_i")
