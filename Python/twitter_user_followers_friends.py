@@ -72,4 +72,4 @@ def main(twit_id):
     print_followers(get_followers_data(twit_id), twit_id)
 
 if __name__ == "__main__":
-    main("applemelon1101")
+    main("user_id")
