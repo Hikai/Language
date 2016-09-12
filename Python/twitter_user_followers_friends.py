@@ -12,7 +12,7 @@ import ujson as json
 ACCESS_TOKEN = 'ACCESS_TOKEN'
 ACCESS_SECRET = 'ACCESS_SECRET_TOKEN'
 CONSUMER_KEY = 'CONSUMER_KEY'
-CONSUMER_SECRET = 'CONSUMER_SECRET'
+CONSUMER_SECRET = 'CONSUMER_SECRET_KEY'
 
 
 def get_dumps(json_api):
@@ -46,30 +46,37 @@ def get_object_twitter():
     return twit
 
 
-def print_friends(json_data, twit_id):
-    """Print Friends information."""
-    users = get_dumps(json_data)
-    print("{} friends(following): ".format(twit_id))
-    for user in get_loads(users)["users"]:
-        twit_id = user["screen_name"]
-        print(" - User name: {}".format(twit_id))
-        # name, description, id
-
-
-def print_followers(json_data, twit_id):
+def get_followers_list(json_data):
     """Print follwers information."""
+    list_followers = []
     users = get_dumps(json_data)
-    print("{} followers: ".format(twit_id))
     for user in get_loads(users)["users"]:
-        twit_id = user["screen_name"]
-        print(" - User name: {}".format(twit_id))
-        # name, description, id
+        # description, name, id, screen_name
+        list_followers = []
+    return list_followers
 
 
-def main(twit_id):
+def get_friends_list(json_data):
+    """Print Friends information."""
+    list_friends = []
+    users = get_dumps(json_data)
+    for user in get_loads(users)["users"]:
+        # description, name, id, screen_name
+        list_friends.append(user["screen_name"])
+    return list_friends
+
+
+def main(start_twit_id):
     """Main."""
-    print_friends(get_friends_data(twit_id), twit_id)
-    print_followers(get_followers_data(twit_id), twit_id)
+    print(start_twit_id, ": following")
+    for user in get_friends_list(get_friends_data(start_twit_id)):
+        print(user)
+        print(get_friends_list(get_friends_data(user)))
+        print(get_followers_list(get_followers_data(user)))
+    for user in get_followers_list(get_followers_data(start_twit_id)):
+        print(user)
+        print(get_friends_list(get_friends_data(user)))
+        print(get_followers_list(get_followers_data(user)))
 
 if __name__ == "__main__":
-    main("user_id")
+    main("applemelon1101")
