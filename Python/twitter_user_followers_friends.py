@@ -68,15 +68,21 @@ def get_friends_list(json_data):
 
 def main(start_twit_id):
     """Main."""
-    print(start_twit_id, ": following")
-    for user in get_friends_list(get_friends_data(start_twit_id)):
-        print(user)
-        print(get_friends_list(get_friends_data(user)))
-        print(get_followers_list(get_followers_data(user)))
-    for user in get_followers_list(get_followers_data(start_twit_id)):
-        print(user)
-        print(get_friends_list(get_friends_data(user)))
-        print(get_followers_list(get_followers_data(user)))
+    with open("list.txt", 'w') as file:
+        file.write("{} following :".format(start_twit_id))
+        for user in get_friends_list(get_friends_data(start_twit_id)):
+            file.write("{} following :".format(user))
+            for child_user in get_friends_list(get_friends_data(user)):
+                file.write(child_user)
+            file.write("{} followers :".format(user))
+            for child_user in get_followers_list(get_followers_data(user)):
+                file.write(child_user)
+        for user in get_followers_list(get_followers_data(start_twit_id)):
+            file.write("{} following :".format(user))
+            for child_user in get_friends_list(get_friends_data(user)):
+                file.write(child_user)
+            for child_user in get_followers_list(get_followers_data(user)):
+                file.write(child_user)
 
 if __name__ == "__main__":
-    main("applemelon1101")
+    main("user_id")
