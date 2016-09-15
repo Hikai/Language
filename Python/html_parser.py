@@ -3,18 +3,24 @@
 HTML Parser.
 
 To-do:
+ - open tag, close tag division.
 """
 import re
 
 
-str_html = """<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+def main():
+    """Main."""
+    str_html = """<!DOCTYPE html>
+    <html>
+    <head>
+        <title></title>
+    </head>
+    <body>
 
-</body>
-</html>
-"""
-print(re.findall('<(.*)>', str_html))
+    </body>
+    </html>
+    """
+    print(re.findall('<([a-z]+)>', str_html))
+
+if __name__ == "__main__":
+    main()
