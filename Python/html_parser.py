@@ -8,10 +8,25 @@ To-do:
 import re
 
 
+def get_attr_list(str_html):
+    """Return tag attribute list."""
+    return re.findall('<[a-z]+ (.*)>', str_html)
+
+
+def get_close_list(str_html):
+    """Return close tag list."""
+    return re.findall('(</[a-z]+>)', str_html)
+
+
+def get_open_list(str_html):
+    """Return open tag list."""
+    return re.findall('(<[a-z]+>)', str_html)
+
+
 def main():
     """Main."""
     str_html = """<!DOCTYPE html>
-    <html>
+    <html lang="ko">
     <head>
         <title></title>
     </head>
@@ -20,7 +35,7 @@ def main():
     </body>
     </html>
     """
-    print(re.findall('<([a-z]+)>', str_html))
+    print(get_attr_list(str_html))
 
 if __name__ == "__main__":
     main()
