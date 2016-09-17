@@ -8,6 +8,11 @@ To-do:
 import re
 
 
+def get_all_tag_list(str_html):
+    """Return open, close, attribute list."""
+    return re.findall('(<(?:|/)[a-z]+>|<(?:|/)[a-z]+(?:.*)>)', str_html)
+
+
 def get_attr_list(str_html):
     """Return tag attribute list."""
     return re.findall('<[a-z]+ (.*)>', str_html)
@@ -35,7 +40,7 @@ def main():
     </body>
     </html>
     """
-    print(get_attr_list(str_html))
+    print(get_all_tag_list(str_html))
 
 if __name__ == "__main__":
     main()
