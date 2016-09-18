@@ -18,14 +18,14 @@ def get_attr_list(str_html):
     return re.findall('<[a-z]+ (.*)>', str_html)
 
 
-def get_close_list(str_html):
-    """Return close tag list."""
-    return re.findall('(</[a-z]+>)', str_html)
+# def get_close_list(str_html):
+#     """Return close tag list."""
+#     return re.findall('(</[a-z]+>)', str_html)
 
 
-def get_open_list(str_html):
-    """Return open tag list."""
-    return re.findall('(<[a-z]+>)', str_html)
+# def get_open_list(str_html):
+#     """Return open tag list."""
+#     return re.findall('(<[a-z]+>)', str_html)
 
 
 def main():
@@ -40,7 +40,12 @@ def main():
     </body>
     </html>
     """
-    print(get_all_tag_list(str_html))
+    list_attr = get_attr_list(str_html)
+    for tag in get_all_tag_list(str_html):
+        for attr in list_attr:
+            if attr in tag:
+                print(tag)
+                break
 
 if __name__ == "__main__":
     main()
