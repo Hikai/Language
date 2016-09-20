@@ -7,6 +7,11 @@ To-do:
 import re
 
 
+
+def find_all(value, html):
+
+
+
 def find_class(value, html):
     """Print class tag."""
     value = "class=\"{}\"".format(value)
@@ -18,7 +23,11 @@ def find_class(value, html):
 
 def find_id(value, html):
     """Print id tag."""
-    print("id")
+    value = "id=\"{}\"".format(value)
+    for tag in get_all_tag_list(html):
+        if value in tag:
+            print(tag)
+            break
 
 
 def get_all_tag_list(str_html):
@@ -32,7 +41,7 @@ def selector(select, html):
     select = select[0]
     quarter = {
         ".": find_class,
-        "#": find_id
+        "#": find_id,
     }
     quarter.get(select)(value, html)
 
@@ -42,12 +51,12 @@ def main():
     str_html = """<!DOCTYPE html>
 <html lang="ko">
 <head class="hiki">
-    <title></title>
+    <title id="hikai"></title>
 </head>
 <body>
 </body>
 </html>"""
-    selector(".hiki", str_html)
+    selector("#hikai", str_html)
 
 if __name__ == "__main__":
     main()
