@@ -59,7 +59,7 @@ def main():
 </body>
 </html>"""
     selector = Selector(str_html)
-    selector.print_selector("#hiki")
+    selector.print_selector("#hikai")
 
 if __name__ == "__main__":
     main()
