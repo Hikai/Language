@@ -14,8 +14,10 @@ headers = {
 # headersssssss
 }
 
-req = requests.get('http://bns.plaync.com/bs/character/profile/Hikai?s=3', headers=headers, cookies=cookies)
+re_name = re.compile('<th class="name"><span(?:.*)>(.*)</span></th>')
+url = 'http://bns.plaync.com/bs/character/profile/Hikai?s=3'
+req = requests.get(url, headers=headers, cookies=cookies)
 soup = BeautifulSoup(req.text, "lxml")
-item_name = soup.findAll("th")
+item_name = soup.findAll("th", {"class": "name"})
 for item in item_name:
-    print(item)
+    print(re_name.findall(str(item))[0])
