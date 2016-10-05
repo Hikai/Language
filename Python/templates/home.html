@@ -2,12 +2,14 @@
 <html>
 <head>
     <title>Home</title>
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
 </head>
 <body>
-{% if name %}
-    {{ name }}
+{% if name and passwd %}
+    <p>{{ name }}</p>
+    <p>{{ passwd }}</p>
 {% else %}
-    hello world
+    {{ url_for("index") }}
 {% endif %}
 </body>
 </html>
