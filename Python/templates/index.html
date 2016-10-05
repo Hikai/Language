@@ -2,9 +2,10 @@
 <html>
 <head>
     <title>Index - login</title>
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
 </head>
 <body>
-    <form action="/login" method="POST">
+    <form action="{{ url_for("login") }}" method="POST">
         Name: <input name="name" type="text" />
         <br />
         Password: <input name="passwd" type="password" />
