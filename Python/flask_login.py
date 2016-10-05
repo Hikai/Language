@@ -13,12 +13,6 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/favicon.ico")
-def work_favicon():
-    """Favicon processing."""
-    return
-
-
 @app.route("/login", methods=["POST"])
 def login(name=None, passwd=None):
     """Root login page."""
@@ -31,4 +25,4 @@ def login(name=None, passwd=None):
             return render_template("home.html", name=val_name, passwd=val_pw)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="7578")
+    app.run(host="0.0.0.0", port=7578)
