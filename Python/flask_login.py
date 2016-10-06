@@ -13,6 +13,12 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/favicon.ico")
+def favicon():
+    """Reqeust favicon 404 escape."""
+    return
+
+
 @app.route("/login", methods=["POST"])
 def login(name=None, passwd=None):
     """Root login page."""
