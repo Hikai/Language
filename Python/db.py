@@ -4,6 +4,7 @@ SQLite db.
 test db
 """
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 from sqlalchemy import create_engine, Column, Integer, String
 
@@ -36,3 +37,10 @@ if not database_exists(ENGINE.url):
     create_database(ENGINE.url)
 
 BASE.metadata.create_all(ENGINE)
+Session = sessionmaker(bind=ENGINE)
+session = Session()
+one_user = User("hiki", "asdf", 1, 1)
+session.add(one_user)
+query = session.query(User)
+query.all()
+session.commit()
