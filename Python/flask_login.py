@@ -6,6 +6,7 @@ example.
 from flask import (
     Flask, redirect, render_template, request, session, url_for
 )
+from sqlalchemy import sessionmaker
 app = Flask(__name__)
 
 
@@ -29,15 +30,21 @@ def favicon():
 @app.route("/login", methods=["POST"])
 def login(name=None, passwd=None):
     """Root login page."""
-    if request.method == "POST":
+    if request.method != "POST":
+        return render_template("index.html")
+    else:
         if request.form["name"] == "" or request.form["passwd"] == "":
             return render_template("index.html")
-        else:
-            val_name = request.form["name"]
-            val_pw = request.form["passwd"]
-            session["name"] = val_name
-            session["passwd"] = val_pw
-            return render_template("home.html", name=val_name, passwd=val_pw)
+    val_name = request.form["name"]
+    val_pw = request.form["passwd"]
+    ses = sessionmaker()
+    obj_ses = ses()
+    query = obj_ses.query("User")
+    query = query.all()
+    obj_ses.commit()
+    session["name"] = val_name
+    session["passwd"] = val_pw
+    return render_template("home.html", name=val_name, passwd=val_pw)
 
 
 @app.route("/logout")
