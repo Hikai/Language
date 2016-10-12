@@ -33,14 +33,20 @@ class User(BASE):
         """User class print method."""
         return "<User({}, {}, {}".format(self.name, self.attk, self.level)
 
+
+def add_user(session, name, passwd, attk, level):
+    """User insert query."""
+    user = User(name, passwd, attk, level)
+    session.add(user)
+    query = session.query(User)
+    query.all()
+
+
 if not database_exists(ENGINE.url):
     create_database(ENGINE.url)
 
 BASE.metadata.create_all(ENGINE)
 Session = sessionmaker(bind=ENGINE)
 session = Session()
-one_user = User("hiki", "asdf", 1, 1)
-session.add(one_user)
-query = session.query(User)
-query.all()
+add_user(session, "hiki", "asdf", 1, 1)
 session.commit()
