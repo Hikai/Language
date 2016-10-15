@@ -8,4 +8,5 @@ import binascii
 
 
 original = "example"
-print(binascii.hexlify(base64.b64decode(original)))
+unhex = binascii.hexlify(base64.b64decode(original))
+to_hex = base64.b64encode(binascii.hexlify(unhex))
