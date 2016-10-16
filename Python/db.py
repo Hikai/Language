@@ -42,11 +42,15 @@ def add_user(session, name, passwd, attk, level):
     query.all()
 
 
-if not database_exists(ENGINE.url):
-    create_database(ENGINE.url)
+def create_db():
+    if not database_exists(ENGINE.url):
+        create_database(ENGINE.url)
+    BASE.metadata.create_all(ENGINE)
 
-BASE.metadata.create_all(ENGINE)
-Session = sessionmaker(bind=ENGINE)
-session = Session()
-add_user(session, "hiki", "asdf", 1, 1)
-session.commit()
+# Session = sessionmaker(bind=ENGINE)
+# session = Session()
+# add_user(session, "hiki", "asdf", 1, 1)
+# session.commit()
+
+if __name__ == "__main__":
+    create_db()
