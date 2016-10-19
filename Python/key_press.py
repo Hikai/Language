@@ -20,7 +20,16 @@ def main():
         if val == 13:
             cls()
             break
-        print(val)
+        map_result = {
+            97: "Left",
+            100: "Right",
+            115: "Down",
+            119: "Up",
+        }
+        result = map_result.get(val)
+        if result is None:
+            continue
+        print(result)
 
 
 if __name__ == "__main__":
