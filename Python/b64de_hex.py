@@ -7,6 +7,6 @@ import base64
 import binascii
 
 
-original = "example"
+original = "original"
 unhex = binascii.hexlify(base64.b64decode(original))
-to_hex = base64.b64encode(binascii.hexlify(unhex))
+to_hex = base64.b64encode(binascii.unhexlify(original))
