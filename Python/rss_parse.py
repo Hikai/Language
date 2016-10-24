@@ -18,3 +18,11 @@ else:
 tree = ElementTree.parse(file_name)
 root = tree.getroot()
 print(root.tag)
+object_tag = root
+while True:
+    tmp_child = None
+    if object_tag:
+        for child in object_tag:
+            print(child.tag, child.attrib)
+        tmp_child = child
+    object_tag = tmp_child
