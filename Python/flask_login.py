@@ -4,7 +4,7 @@ Flask login.
 example.
 """
 from flask import (
-    Flask, render_template, request, session
+    Flask, render_template, request, Session
 )
 app = Flask(__name__)
 
