@@ -7,9 +7,18 @@ from msvcrt import getch
 from os import system
 
 
+OBJ = "O"
+
+
 def cls():
     """Command prompt clear."""
     system("cls")
+
+
+def evt_right():
+    """Mouse right button event."""
+    global OBJ
+    OBJ = " " + OBJ
 
 
 def main():
@@ -22,14 +31,11 @@ def main():
             break
         map_result = {
             97: "Left",
-            100: "Right",
+            100: evt_right,
             115: "Down",
             119: "Up",
         }
-        result = map_result.get(val)
-        if result is None:
-            continue
-        print(result)
+        map_result.get(val)
 
 
 if __name__ == "__main__":
