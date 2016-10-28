@@ -20,6 +20,8 @@ def evt_right():
     global OBJ
     OBJ = " " + OBJ
 
+    return OBJ
+
 
 def main():
     """Main."""
@@ -29,13 +31,14 @@ def main():
         if val == 13:
             cls()
             break
+
         map_result = {
             97: "Left",
             100: evt_right,
             115: "Down",
             119: "Up",
         }
-        map_result.get(val)
+        print(map_result.get(val)
 
 
 if __name__ == "__main__":
