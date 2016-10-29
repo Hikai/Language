@@ -15,11 +15,22 @@ def cls():
     system("cls")
 
 
-def evt_right():
-    """Mouse right button event."""
+def evt_left():
+    """Keyboard left button event."""
     global OBJ
-    OBJ = " " + OBJ
 
+    if len(OBJ) == 1:
+        return OBJ
+    
+    OBJ = OBJ[1:]
+    return OBJ
+
+
+def evt_right():
+    """Keyboard right button event."""
+    global OBJ
+    
+    OBJ = " " + OBJ
     return OBJ
 
 
@@ -33,7 +44,7 @@ def main():
             break
 
         map_result = {
-            97: "Left",
+            97: evt_left,
             100: evt_right,
             115: "Down",
             119: "Up",
