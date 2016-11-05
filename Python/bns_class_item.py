@@ -119,18 +119,18 @@ def init():
     return (list_obj_seongun, list_obj_chokma, list_obj_gonryun)
 
 
-def calc_materials(start, end):
+def calc_materials(list_seongun, start, end):
     """Calculator materials."""
-# test1 = res[1].get_item_materials().copy()
-# test2 = res[2].get_item_materials().copy()
-# for k in test1:
-#     if k in test2:
-#         prev = test2.get(k)
-#         test1[k] += prev
-#     else:
-#         tmp_dict = {k: test1.get(k)}
-#         test1.update(tmp_dict)
-    # calc
+    materials_dict = {}
+    for index in range(start, end + 1):
+        tmp_obj = list_seongun[index].get_item_materials()
+        for key in tmp_obj:
+            if key in materials_dict:
+                materials_dict[key] += tmp_obj.get(key)
+            else:
+                tmp_dict = {key: tmp_obj.get(key)}
+                materials_dict.update(tmp_dict)
+    print(materials_dict)
 
 
 def main():
@@ -139,15 +139,16 @@ def main():
 
     resa = seongun weapon object list.
     resb = chokma weapon object list.
-    resc = gonryun.
+    resc = gonryun weapon object list.
     """
     resa, resb, resc = init()
-    for item in resa:
-        print(item.get_item_name(), item.get_item_materials())
-    for item in resb:
-        print(item.get_item_name(), item.get_item_materials())
-    for item in resc:
-        print(item.get_item_name(), item.get_item_materials())
+    calc_materials(resa, 1, 12)
+    # for item in resa:
+    #     print(item.get_item_name(), item.get_item_materials())
+    # for item in resb:
+    #     print(item.get_item_name(), item.get_item_materials())
+    # for item in resc:
+    #     print(item.get_item_name(), item.get_item_materials())
 
 if __name__ == '__main__':
     main()
