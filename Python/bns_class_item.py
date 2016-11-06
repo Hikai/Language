@@ -4,6 +4,7 @@ BNS item tree.
 . . .
 """
 from collections import OrderedDict
+from random import choice
 
 
 class Item():
@@ -116,14 +117,21 @@ def init():
     list_obj_chokma = init_list(MAP_CHOKMA, BASE_MATERIALS_CHOKMA)
     list_obj_gonryun = init_list(MAP_GONRYUN, BASE_MATERIALS_GONRYUN)
 
-    return (list_obj_seongun, list_obj_chokma, list_obj_gonryun)
+    return list_obj_seongun + list_obj_chokma + list_obj_gonryun
 
 
-def calc_materials(list_seongun, start, end):
+def weapon_check(end):
+    """Weapon materials check function."""
+    pass
+
+
+def calc_materials(list_obj, start, end):
     """Calculator materials."""
     materials_dict = {}
     for index in range(start, end + 1):
-        tmp_obj = list_seongun[index].get_item_materials()
+        tmp_obj = list_obj[index].get_item_materials()
+        if type(tmp_obj) is list:
+            tmp_obj = choice(tmp_obj)
         for key in tmp_obj:
             if key in materials_dict:
                 materials_dict[key] += tmp_obj.get(key)
@@ -141,14 +149,11 @@ def main():
     resb = chokma weapon object list.
     resc = gonryun weapon object list.
     """
-    resa, resb, resc = init()
-    calc_materials(resa, 1, 12)
-    # for item in resa:
+    res = init()
+    calc_materials(res, 1, 13)
+    # for item in res:
     #     print(item.get_item_name(), item.get_item_materials())
-    # for item in resb:
-    #     print(item.get_item_name(), item.get_item_materials())
-    # for item in resc:
-    #     print(item.get_item_name(), item.get_item_materials())
+    # print(choice(res).get_item_name())
 
 if __name__ == '__main__':
     main()
