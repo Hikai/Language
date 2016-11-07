@@ -159,19 +159,26 @@ def calc_materials(list_obj, start, end):
     print(materials_dict)
 
 
+def input_number(list_obj):
+    """Start, end number input function."""
+    for item in list_obj:
+        print(item.get_item_name())
+
+    start = input("시작 아이템 번호: ")
+    end = input("목표 아이템 번호: ")
+
+    return start, end
+
+
 def main():
     """
     Main function.
 
-    resa = seongun weapon object list.
-    resb = chokma weapon object list.
-    resc = gonryun weapon object list.
+    res = weapon list.
     """
     res = init()
-    calc_materials(res, 1, 13)
-    # for item in res:
-    #     print(item.get_item_name(), item.get_item_materials())
-    # print(choice(res).get_item_name())
+    start, end = input_number(res)
+    calc_materials(res, start, end)
 
 if __name__ == '__main__':
     main()
