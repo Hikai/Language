@@ -1,31 +1,11 @@
 """
-BNS item tree.
+BNS item - weapon tree.
 
 . . .
 """
 from collections import OrderedDict
 from random import choice
-
-
-class Item():
-    """Item base class."""
-
-    name = ""
-    materials = {}
-
-    def __init__(self, item_name, *args):
-        """Item class initialize."""
-        self.name = item_name
-        if args and len(args) != 0:
-            self.materials = args[0]
-
-    def get_item_name(self):
-        """Return item name."""
-        return self.name
-
-    def get_item_materials(self):
-        """Return item materials."""
-        return self.materials
+from bns_item_class import Item
 
 
 MAP_SEONGUN = OrderedDict([
@@ -46,7 +26,6 @@ MAP_SEONGUN = OrderedDict([
     ("성운무기 12단계", {"설옥무기": 1, "성운무기 11단계": 1})])
 BASE_MATERIALS_SEONGUN = {"영석": 125, "월석": 30, "상승무혼": 3, "백청 진화석": 1,
                           "성운조각": 10, "금": 60}
-# if seongun weapon in value, dont update base materials.
 MAP_CHOKMA = OrderedDict([
     ("촉마무기 1단계", [{"성운무기 10단계": 1, "촉마왕의 재료": 1, "월석": 300,
                     "설혼 부적": 60, "백청 고급진화석": 35, "상승무혼": 60, "금": 600},
@@ -81,7 +60,12 @@ BASE_MATERIALS_GONRYUN = {"흑풍혼": 20, "월석": 400, "백청 고급진화�
 
 
 def init_list(map_weapon, dict_materials):
-    """Weapon list init function."""
+    """
+    Weapon list init function.
+
+    bool_name = specific weapon name check. (condition: map_cond_name)
+    add_materials = base materials variable.
+    """
     list_weapon = []
     for item in map_weapon.items():
         bool_name = 0
@@ -121,7 +105,11 @@ def init():
 
 
 def weapon_check(list_obj, obj, start, cur_index):
-    """Weapon materials check function."""
+    """
+    Weapon materials check function.
+
+    bool_weapon = specific weapon name check. (condition: map_cond_weapon)
+    """
     bool_weapon = 0
     map_cond_weapon = {
         "촉마무기 1단계": 1,
@@ -142,7 +130,12 @@ def weapon_check(list_obj, obj, start, cur_index):
 
 
 def calc_materials(list_obj, start, end):
-    """Calculator materials."""
+    """
+    Calculator materials.
+
+    materials_dict = last result for materials.
+    tmp_mtl = materials temporarily variable.
+    """
     materials_dict = {}
     for index in range(start, end + 1):
         tmp_mtl = list_obj[index].get_item_materials()
@@ -161,13 +154,18 @@ def calc_materials(list_obj, start, end):
 
 def input_number(list_obj):
     """Start, end number input function."""
-    for item in list_obj:
-        print(item.get_item_name())
+    show_items(list_obj)
 
     start = input("시작 아이템 번호: ")
     end = input("목표 아이템 번호: ")
 
     return start, end
+
+
+def show_items(list_obj):
+    """Show ites function."""
+    for index, item in enumerate(list_obj):
+        print(index, item.get_item_name())
 
 
 def main():
