@@ -81,10 +81,7 @@ def init_list(map_weapon, dict_materials):
 
         add_materials = dict_materials.copy()
         if type(item[1]) is list:
-            if "촉마무기 2단계" in item[1][0]:
-                item[1][0].update(add_materials)
-                list_weapon.append(Item(item[0], item[1]))
-            elif "곤륜무기 2단계" in item[1][0]:
+            if "촉마무기 2단계" or "곤륜무기 2단계" in item[1][0]:
                 item[1][0].update(add_materials)
                 list_weapon.append(Item(item[0], item[1]))
             continue
@@ -149,23 +146,29 @@ def calc_materials(list_obj, start, end):
                 tmp_dict = {key: tmp_mtl.get(key)}
                 materials_dict.update(tmp_dict)
 
-    print(materials_dict)
+    show_dict(materials_dict)
 
 
 def input_number(list_obj):
     """Start, end number input function."""
     show_items(list_obj)
 
-    start = input("시작 아이템 번호: ")
-    end = input("목표 아이템 번호: ")
+    start = int(input("시작 아이템 번호: "))
+    end = int(input("목표 아이템 번호: "))
 
     return start, end
 
 
 def show_items(list_obj):
-    """Show ites function."""
+    """Show items function."""
     for index, item in enumerate(list_obj):
         print(index, item.get_item_name())
+
+
+def show_dict(materials):
+    """Show materials dict function."""
+    for key in materials:
+        print(key, materials.get(key))
 
 
 def main():
@@ -178,5 +181,5 @@ def main():
     start, end = input_number(res)
     calc_materials(res, start, end)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
