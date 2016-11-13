@@ -33,15 +33,16 @@ def init_list(map_item):
 def init():
     """Initialize function."""
     list_maengse = init_list(MAP_MAENGSE)
+    list_cj = init(MAP_CHOMA_JUKPAE)
 
-    return list_maengse
+    return (list_maengse, list_cj)
 
 
 def main():
     """Main function."""
-    res = init()
-    for item in res:
-        print(item.get_item_name())
+    resa, resb = init()
+    for itema, itemb in (resa, resb):
+        print(itema.get_item_name(), itemb.get_item_name())
 
 
 if __name__ == "__main__":
