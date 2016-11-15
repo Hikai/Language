@@ -4,6 +4,7 @@ Firmware mod kit base code.
 settings(): ubuntu only.
 . . .
 """
+import subprocess
 import os
 import time
 
@@ -18,6 +19,19 @@ def settings():
     os.system("sudo apt-get install -y " + PACKAGES)
     os.system("wget " + URL)
     os.system("tar fzx fmk_099.tar.gz")
+
+
+def file_architecture(filename):
+    """Get file architecture functions."""
+    cmd = "file " + filename
+
+    result = subprocess.check_output(cmd, shell=True)
+    if "ARM" or "arm" in result:
+        return "ARM"
+    elif "MIPS" or "mips" in result:
+        return "mips"
+    else:
+        return "x86"
 
 
 def main(filename):
