@@ -25,7 +25,15 @@ def init_list(map_item):
     """Item list initialize function."""
     list_item = []
     for key in map_item:
-        list_item.append(Item(key, map_item[key]))
+        if "맹세" in key:
+            tmp = map_item[key]
+            tmp.update(DICT_BASE_MAENGSE)
+        elif "초마/적패" in key:
+            tmp = map_item[key]
+            tmp.update(DICT_BASE_CHOMA_JUKPAE)
+        else:
+            tmp = map_item[key]
+        list_item.append(Item(key, tmp))
 
     return list_item
 
@@ -33,7 +41,7 @@ def init_list(map_item):
 def init():
     """Initialize function."""
     list_maengse = init_list(MAP_MAENGSE)
-    list_cj = init(MAP_CHOMA_JUKPAE)
+    list_cj = init_list(MAP_CHOMA_JUKPAE)
 
     return (list_maengse, list_cj)
 
@@ -41,8 +49,9 @@ def init():
 def main():
     """Main function."""
     resa, resb = init()
-    for itema, itemb in (resa, resb):
-        print(itema.get_item_name(), itemb.get_item_name())
+    for itema, itemb in zip(resa, resb):
+        print(itema.get_item_name(), itema.get_item_materials())
+        print(itemb.get_item_name(), itemb.get_item_materials())
 
 
 if __name__ == "__main__":
