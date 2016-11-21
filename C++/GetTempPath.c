@@ -1,15 +1,27 @@
-#include <Windows.h>
 #include <stdio.h>
+#include <Windows.h>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
 
+char res[512] = "";
+char format[] = "%s\n";
+
 int main(void)
 {
-	DWORD len = 1024;
-	char str[1024] = "";
-	GetTempPathA(len, str);
-	printf("%s\n", str);
-	return 0;
+    DWORD len = 512;
+    GetTempPathA(len, res);
+
+    __asm {
+        mov eax, offset res
+        push eax
+        mov eax, offset format
+        push eax
+        call printf
+        pop  ebx
+        pop  ebx
+    }
+
+    return 0;
 }
