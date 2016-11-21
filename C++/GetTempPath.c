@@ -7,20 +7,23 @@
 
 char res[512] = "";
 char format[] = "%s\n";
+DWORD len = 512;
 
 int main(void)
 {
-    DWORD len = 512;
-    GetTempPathA(len, res);
-
     __asm {
+        mov eax, offset res
+        push eax
+        mov eax, offset len
+        push eax
+        call GetTempPathA
         mov eax, offset res
         push eax
         mov eax, offset format
         push eax
         call printf
-        pop  ebx
-        pop  ebx
+        pop ebx
+        pop ebx
     }
 
     return 0;
