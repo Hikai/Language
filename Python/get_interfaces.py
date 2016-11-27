@@ -3,7 +3,11 @@ Get interaces list.
 
 . . .
 """
-import os
+from os import listdir
+from platform import system
 
 
-print(os.listdir("/sys/class/net"))
+if system() is "Linux":
+    print(listdir("/sys/class/net"))
+else:
+    return
