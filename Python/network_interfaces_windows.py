@@ -22,8 +22,10 @@ KEY = OpenKey(ROOT, SUBKEY)
 try:
     count = 0
     while 1:
-        name, value, ty = EnumValue(KEY, count)
-        print(name, value, ty)
+        name = EnumValue(KEY, count)
+        sub_name = OpenKey(KEY, name)
+        value = QueryValueEx(sub_name, "DisplayName")
+        print(value)
         count += 1
 except WindowsError:
     pass
