@@ -8,7 +8,7 @@ import urllib
 import re
 
 
-RE_SRC = re.compile("(?:src|data-src)=\"(.*)\"")
+RE_SRC = re.compile("<img.*?(?:src|data-src)=\"(.*?)\"")
 
 
 def get_list_img(source):
