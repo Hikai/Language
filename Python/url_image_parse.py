@@ -4,6 +4,7 @@ Image parse.
 . . .
 """
 from bs4 import BeautifulSoup
+from base64 import b64decode
 import os
 import time
 import urllib
@@ -11,6 +12,20 @@ import re
 
 
 RE_SRC = re.compile("<img.*?(?:src|data-src)=\"(.*?)\"")
+
+
+def discern_scheme(path, list_value):
+    """Data url scheme discern and saving function."""
+    for value in list_value:
+        if "data:image" in value:
+            # code = value.split(',')[1]
+            # extension = value[value.find('/') + 1:value.find(';')]
+            # with open("{}{}.{}".format(path, code, extension), "wb") as image:
+            #     image.write(str(b64decode(code)))
+            # del(list_value[list_value.index(value)])
+            print(value)
+
+    return list_value
 
 
 def duplicate_remove_list(list_what):
@@ -43,6 +58,14 @@ def get_url_read(url):
     return read
 
 
+def make_directory():
+    """Make directtory and return path function."""
+    folder = os.getcwd() + "\\" + str(time.time()).split('.')[0] + "\\"
+
+    if os.path.isdir(folder) is False:
+        os.mkdir(folder)
+
+
 def save_image_file_link(image_url, folder):
     """Save image in timestamp folder."""
     file = image_url[image_url.rfind("/") + 1:]
@@ -52,19 +75,20 @@ def save_image_file_link(image_url, folder):
     urllib.urlretrieve(image_url, folder + file)
 
 
-def main():
+def main(url):
     """Main function."""
-    source = get_url_read("http://www.naver.com")
+    source = get_url_read(url)
     list_img_tag = get_list_img(source)
     list_value = get_src_value(list_img_tag)
+    path_folder = make_directory()
+    list_value = discern_scheme(path_folder, list_value)
 
-    folder = os.getcwd() + "\\" + str(time.time()).split('.')[0] + "\\"
-    if os.path.isdir(folder) is False:
-        os.mkdir(folder)
-
-    for value in list_value:
-        save_image_file_link(value, folder)
+    if len(list_value) != 0:
+        for value in list_value:
+            save_image_file_link(value, path_folder)
 
 
 if __name__ == "__main__":
-    main()
+    # url = "http://www.naver.com"
+    url = "https://www.google.co.kr/search?q=hibiki"
+    main(url)
