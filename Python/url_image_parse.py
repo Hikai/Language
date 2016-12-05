@@ -46,6 +46,9 @@ def get_url_read(url):
 def save_image_file_link(image_url, folder):
     """Save image in timestamp folder."""
     file = image_url[image_url.rfind("/") + 1:]
+    if "?" in file:
+        file = file[:file.find('?')]
+
     urllib.urlretrieve(image_url, folder + file)
 
 
