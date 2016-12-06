@@ -12,7 +12,7 @@ import re
 import sys
 
 
-RE_SRC = re.compile(r"<img.*?(?:src|data-src)="(.*?)"")
+RE_SRC = re.compile(r"""<img.*?(?:src|data-src)="(.*?)"""")
 
 
 # def discern_scheme(path, list_value):
