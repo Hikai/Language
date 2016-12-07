@@ -4,7 +4,6 @@ Image parse.
 . . .
 """
 from bs4 import BeautifulSoup
-# from base64 import b64decode
 import os
 import time
 import urllib
@@ -13,20 +12,6 @@ import sys
 
 
 RE_SRC = re.compile(r"<img.*?(?:src|data-src)=\"(.*?)")
-
-
-# def discern_scheme(path, list_value):
-    """Data url scheme discern and saving function."""
-    # for value in list_value:
-    #     if "data:image" in value:
-    #         code = value.split(',')[1]
-    #         extension = value[value.find('/') + 1:value.find(';')]
-    #         with open("{}{}.{}".format(path, code, extension), "wb") as image:
-    #             image.write(str(b64decode(code)))
-    #         del(list_value[list_value.index(value)])
-    #         print(value)
-
-    # return list_value
 
 
 def duplicate_remove_list(list_what):
@@ -78,7 +63,7 @@ def save_image_file_link(image_url, folder):
 
 def usage():
     """Usage function."""
-    print("{} [url]".forma(sys.argv[0]))
+    print("{} [url]".format(sys.argv[0]))
     exit()
 
 
@@ -89,7 +74,8 @@ def main(url):
     print(list_img_tag)
     list_value = get_src_value(list_img_tag)
     path_folder = make_directory()
-    # list_value = discern_scheme(path_folder, list_value)
+    for value in list_value:
+        print(value)
 
     if len(list_value) != 0:
         for value in list_value:
@@ -97,7 +83,6 @@ def main(url):
 
 
 if __name__ == "__main__":
-    # url = "http://www.naver.com"
     if len(sys.argv) != 2:
         usage()
 
