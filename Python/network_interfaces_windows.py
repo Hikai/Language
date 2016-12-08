@@ -3,30 +3,33 @@ Windows network interfaces.
 
 . . .
 """
-import sys
+import _winreg as winreg
 
 
-if sys.version_info > (2, 7):
-    from winreg import *
-    # python 3.x import
-else:
-    from winreg import *
-    # python 2.x import
+def running(subkey):
+    """Print registry function."""
+    registry = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
+    key = winreg.OpenKey(registry, subkey, 0, winreg.KEY_ALL_ACCESS)
+
+    try:
+        count = 0
+        while True:
+            name, value, type = winreg.EnumValue(key, count)
+            print("{}, {}".format(name, value))
+
+            count += 1
+    except WindowsError:
+        pass
+
+    winreg.CloseKey(key)
 
 
-SUBKEY = "SYSTEM\\CurrentControlSet\\Control\\Network\\"
-SUBKEY += "{4D36E972-E325-11CE-BFC1-08002BE10318}"
-ROOT = ConnectRegistry(None, HKEY_LOCAL_MACHINE)
-KEY = OpenKey(ROOT, SUBKEY)
+def main():
+    """Main function."""
+    subkey = r"SYSTEM\CurrentControlSet\Control\Network"
+    subkey += r"\{4D36E972-E325-11CE-BFC1-08002BE10318}"
+    print(subkey)
+    running(subkey)
 
-try:
-    count = 0
-    while 1:
-        name = EnumValue(KEY, count)
-        sub_name = OpenKey(KEY, name)
-        value = QueryValueEx(sub_name, "DisplayName")
-        print(value)
-        count += 1
-except WindowsError:
-    pass
-CloseKey(KEY)
+if __name__ == "__main__":
+    main()
