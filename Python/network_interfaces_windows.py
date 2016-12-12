@@ -8,10 +8,10 @@ import _winreg as winreg
 
 def get_interfaces_list(subkey):
     """Return network interfaces registry list function."""
-    registry = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
-    key = winreg.OpenKey(registry, subkey, 0, winreg.KEY_ALL_ACCESS)
     list_if = []
 
+    registry = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
+    key = winreg.OpenKey(registry, subkey, 0, winreg.KEY_ALL_ACCESS)
     try:
         index = 0
         while True:
