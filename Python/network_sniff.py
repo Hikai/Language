@@ -35,21 +35,30 @@ def main():
 
             iph = struct.unpack("!BBHHHBBH4s4s", data[0:20])
             iphl = (iph[0] & 0xF) * 4
+            protocol = iph[6]
+            if protocol != 6:
+                continue
+
             src = socket.inet_ntoa(iph[8])
             dest = socket.inet_ntoa(iph[9])
-            if dest != "203.104.248.135" or src != "203.104.248.135":
+            if src != "filter ip" and dest != "filter ip":
                 continue
 
             tcph = struct.unpack("!HHLLBBHHH", data[iphl:iphl + 20])
+            port_src = tcph[0]
+            port_dest = tcph[1]
+            if port_src != (int)filter port and port_dest != (int)filter port:
+                continue
+
             tcphl = tcph[4] >> 4
 
             h_size = iphl + tcphl * 4
             pure_data = data[h_size:]
-            print("{}--------------------".format(int(time())))
 
             if len(pure_data) == 0:
                 continue
 
+            print("{}--------------------".format(int(time())))
             print("Data: {}\n".format(pure_data))
 
         except KeyboardInterrupt:
