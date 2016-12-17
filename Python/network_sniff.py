@@ -112,6 +112,7 @@ def main():
             print("Date length: {}".format(len(data)))
 
         except KeyboardInterrupt:
+            del obj_packet
             exit(0)
 
     del obj_packet
