@@ -9,7 +9,7 @@ import struct
 
 
 class Packet():
-    """Packet header divide class."""
+    """Packet header processing class."""
 
     data = ""
 
@@ -38,6 +38,27 @@ class Packet():
     def __exit__(self, *err):
         """Packet class exit method."""
         pass
+
+    # def filter(self, **kwargs):
+    #     """Packet filter method."""
+    #     cmp_ip_src = kwargs.get("ip_src", "0")
+    #     cmp_ip_dest = kwargs.get("ip_dest", "0")
+    #     cmp_port_src = kwargs.get("port_src", 0)
+    #     cmp_port_dest = kwargs.get("port_dest", 0)
+
+    #     for key in kwargs:
+    #         if self.ip_src == cmp_ip_src:
+    #             continue
+    #         elif self.ip_dest == cmp_ip_dest:
+    #             continue
+    #         elif self.port_src == cmp_port_src:
+    #             continue
+    #         elif self.port_dest == cmp_port_dest:
+    #             continue
+    #         else:
+    #             return False
+
+    #     return True
 
     def ip_settings(self, data):
         """Ip class member setting method."""
@@ -103,6 +124,11 @@ def main():
             if port_src != 80 and port_dest != 80:
                 continue
 
+            # obj_packet.filter(ip_src="203.104.248.135",
+            #                   ip_dest="203.104.248.135",
+            #                   port_src=80,
+            #                   port_dest=80)
+
             data = obj_packet.pure_data
             if len(data) == 0:
                 continue
@@ -110,6 +136,8 @@ def main():
             print("{}--------------------".format(int(time())))
             print("Data:\n{}".format(data))
             print("Date length: {}".format(len(data)))
+            # if len(data) == 2:
+            #     print(struct.pack("i", int(data)))
 
         except KeyboardInterrupt:
             del obj_packet
