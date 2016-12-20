@@ -1,7 +1,7 @@
 """
 BNS customize screenshot parse.
 
-. . .
+Start position: 0xBA ~ random
 """
 from __future__ import print_function
 import sys
@@ -16,11 +16,26 @@ def get_read_binary(path_file):
     return read
 
 
+def get_xml(b_read):
+    """Return xml string function."""
+    b_read = b_read[186:]
+    for index, r in enumerate(b_read):
+        if hex(ord(r)) == "0xff":
+            index_end = index
+            break
+        else:
+            continue
+
+    b_read = b_read[:index_end]
+
+    return b_read
+
+
 def main(path_file):
     """Main function."""
     contents = get_read_binary(path_file)
-    for content in contents:
-        print("{} ".format(hex(ord(content))), end='')
+    xml = get_xml(contents)
+    print(xml)
 
 
 def usage():
