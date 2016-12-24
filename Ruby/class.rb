@@ -1,13 +1,24 @@
 class A
-  def initalize(name, age, sex)
-    @name = name
-    @age = age
-    @sex = sex
+  @@name = nil
+  @@level = 0
+  @@hp = 0
+  @@mp = 0
+
+  def initialize(name, level, hp, mp)
+    @@name = name
+    @@level = name
+    @@hp = hp
+    @@mp = mp
   end
   
-  def print_info
-    puts "#{@name}, #{@age}, #{@sex}"
+  # def name
+  #   self.@@name
+  # end
+  
+  # def level
+  #   self.@@level
+  # end
 end
 
-aa = A.new("hiki", 12, "female")
-aa.print_info
+# a = A.new("hiki", 17, 17, 17)
+puts A.name
