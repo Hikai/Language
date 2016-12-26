@@ -3,21 +3,29 @@ Python a few second memory dump script.
 
 . . . (windows)
 """
-import subprocess
+import psutil
 
 
 def check_process():
-    """Process monitoring function."""
-    cmd = "wmic process get description, executablepath, processid"
-    result = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    """Monitoring proces list function."""
+    for proc in psutil.process_iter():
+        if proc.name() == u"chrome.exe":
+            return proc.pid
 
-    return result.stdout
+    return False
 
 
 def main():
     """Main function."""
-    for line in check_process():
-        print(line)
+    print("Waiting Client.exe")
+    while True:
+        pid = check_process()
+        if pid is False:
+            continue
+        else:
+            break
+
+    print(pid)
 
 
 if __name__ == "__main__":
