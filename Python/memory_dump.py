@@ -15,13 +15,13 @@ class Debugger():
     """Debugging class."""
 
     def __init__(self, pid):
-        """Debugger class: Initialize method."""
+        """Initialize method."""
         self.hnd = None
         self.debug_active = False
         self.pid = pid
 
     def attach(self):
-        """Debugger class: Process attach method."""
+        """Process attach method."""
         self.hnd = KERNEL.OpenProcess(win32.PROCESS_ALL_ACCESS, False,
                                       self.pid)
 
@@ -33,7 +33,7 @@ class Debugger():
             self.get_last_error()
 
     def dettach(self):
-        """Debugger class: Process dettach method."""
+        """Process dettach method."""
         if KERNEL.DebugActiveProcessStop(self.pid):
             print("Stop debugging.")
         else:
@@ -41,7 +41,7 @@ class Debugger():
             self.get_last_error()
 
     def read_memory(self):
-        """Debugger class: Process memory read method."""
+        """Process memory read method."""
         adr = 0x100000
         buf = c_char_p("data")
         size_buf = len(buf.value)
@@ -55,14 +55,14 @@ class Debugger():
             self.get_last_error()
 
     def get_last_error(self):
-        """Debugger class: Last error method."""
+        """GetLastError() method."""
         print("Error: {}".format(KERNEL.GetLastError()))
 
 
 def check_process():
     """Monitoring proces list function."""
     for proc in psutil.process_iter():
-        if proc.name() == u"chrome.exe":
+        if proc.name() == u"Client.exe":
             return proc.pid
 
     return False
