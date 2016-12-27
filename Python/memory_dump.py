@@ -43,16 +43,18 @@ class Debugger():
     def read_memory(self):
         """Process memory read method."""
         adr = 0x100000
-        buf = c_char_p("data")
+        buf = c_char_p("tmp")
         size_buf = len(buf.value)
         bytes_read = c_ulong(0)
 
         if KERNEL.ReadProcessMemory(self.hnd, adr, buf, size_buf,
                                     byref(bytes_read)):
-            print("Memory: {}".format(buf))
+            print("Read memory success")
         else:
             print("Fail to read memory.")
             self.get_last_error()
+
+        print("Memory: {}".format(buf))
 
     def get_last_error(self):
         """GetLastError() method."""
@@ -62,7 +64,7 @@ class Debugger():
 def check_process():
     """Monitoring proces list function."""
     for proc in psutil.process_iter():
-        if proc.name() == u"Client.exe":
+        if proc.name() == u"chrome.exe":
             return proc.pid
 
     return False
