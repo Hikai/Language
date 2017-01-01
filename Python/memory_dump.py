@@ -3,12 +3,12 @@ Python a few second memory dump script.
 
 . . . (windows)
 """
-from _multiprocessing import win32
 from ctypes import byref, c_char_p, c_ulong, windll
 import psutil
 
 
 KERNEL = windll.kernel32
+PROCESS_VM_READ = 0x0010
 
 
 class Debugger():
@@ -22,8 +22,9 @@ class Debugger():
 
     def attach(self):
         """Process attach method."""
-        self.hnd = KERNEL.OpenProcess(win32.PROCESS_ALL_ACCESS, False,
-                                      self.pid)
+        # self.hnd = KERNEL.OpenProcess(win32.PROCESS_ALL_ACCESS, False,
+        #                               self.pid)
+        self.hnd = KERNEL.OpenProcess(PROCESS_VM_READ, False, self.pid)
 
         if KERNEL.DebugActiveProcess(self.pid):
             self.debug_active = True
