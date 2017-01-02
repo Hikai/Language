@@ -8,7 +8,7 @@ import psutil
 
 
 KERNEL = windll.kernel32
-PROCESS_VM_READ = 0x0010
+from _multiprocessing import win32
 
 
 class Debugger():
@@ -22,10 +22,8 @@ class Debugger():
 
     def attach(self):
         """Process attach method."""
-        # self.hnd = KERNEL.OpenProcess(win32.PROCESS_ALL_ACCESS, False,
-        #                               self.pid)
-        self.hnd = KERNEL.OpenProcess(PROCESS_VM_READ, False, self.pid)
-
+        self.hnd = KERNEL.OpenProcess(win32.PROCESS_ALL_ACCESS, False,
+                                      self.pid)
         if KERNEL.DebugActiveProcess(self.pid):
             self.debug_active = True
             print("Attaching start.")
@@ -41,6 +39,10 @@ class Debugger():
             print("Fail to dettach.")
             self.get_last_error()
 
+    def get_last_error(self):
+        """GetLastError() method."""
+        print("Error: {}".format(KERNEL.GetLastError()))
+
     def read_memory(self):
         """Process memory read method."""
         adr = 0x100000
@@ -50,16 +52,17 @@ class Debugger():
 
         if KERNEL.ReadProcessMemory(self.hnd, adr, buf, size_buf,
                                     byref(bytes_read)):
-            print("Read memory success")
+            print("Memory: {}".format(buf))
         else:
             print("Fail to read memory.")
             self.get_last_error()
 
-        print("Memory: {}".format(buf))
-
-    def get_last_error(self):
-        """GetLastError() method."""
-        print("Error: {}".format(KERNEL.GetLastError()))
+        """Set seDebugPrivilage option."""
+        # kernel32RNEL.OpenProcessToken(self.hnd, )
+        # token | token, hToken
+        # SetPrivilege(hToken, SE_DEBUG_NAME, valid)
+        # not => CloseHandle()
+        pass
 
 
 def check_process():
