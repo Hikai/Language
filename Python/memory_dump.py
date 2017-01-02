@@ -3,12 +3,13 @@ Python a few second memory dump script.
 
 . . . (windows)
 """
-from ctypes import byref, c_char_p, c_ulong, windll
+from _multiprocessing import win32
+from ctypes import byref, c_char_p, c_ulong, windll, wintypes
 import psutil
 
 
 KERNEL = windll.kernel32
-from _multiprocessing import win32
+TOKEN_ALL_ACCESS = 0xf00ff
 
 
 class Debugger():
@@ -24,6 +25,7 @@ class Debugger():
         """Process attach method."""
         self.hnd = KERNEL.OpenProcess(win32.PROCESS_ALL_ACCESS, False,
                                       self.pid)
+        self.set_privilege(True)
         if KERNEL.DebugActiveProcess(self.pid):
             self.debug_active = True
             print("Attaching start.")
@@ -57,12 +59,11 @@ class Debugger():
             print("Fail to read memory.")
             self.get_last_error()
 
+    def set_privilege(self, valid):
         """Set seDebugPrivilage option."""
-        # kernel32RNEL.OpenProcessToken(self.hnd, )
-        # token | token, hToken
-        # SetPrivilege(hToken, SE_DEBUG_NAME, valid)
-        # not => CloseHandle()
-        pass
+        hnd_token = wintypes.HANDLE()
+        KERNEL.OpenProcessToken(self.hnd, TOKEN_ALL_ACCESS, byref(hnd_token))
+        KERNEL.CloseHandle(hnd_token)
 
 
 def check_process():
