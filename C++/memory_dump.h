@@ -13,7 +13,7 @@
 
 #define ARR_MAX 1024
 
-BOOL check_process();
+void check_process(_Out_ DWORD *);
 void set_name_by_pid(_In_ DWORD pid);
 
 TCHAR name_proc[ARR_MAX];
@@ -24,20 +24,21 @@ private:
 	BOOL debug_active = false;
 	DWORD pid = 0;
 
+	void set_privilege(_In_ bool);
+
 public:
 	Debugger(_In_ DWORD);
 	void attach();
 	void dettach();
 	void read_memory();
-	void set_privilege(_In_ bool);
 };
 
-BOOL check_process()
+void check_process(_Out_ DWORD *pid)
 {
 	DWORD arr_process[ARR_MAX], bytes_proc, max_proc;
 	if (!EnumProcesses(arr_process, sizeof(arr_process), &bytes_proc)) {
 		std::cout << "Process enumerate failed." << std::endl;
-		return false;
+		return;
 	}
 
 	max_proc = bytes_proc / sizeof(DWORD);
@@ -46,13 +47,12 @@ BOOL check_process()
 		if (arr_process[i] != 0) {
 			set_name_by_pid(arr_process[i]);
 			if (!wcscmp(name_proc, TEXT("cmd.exe"))) {
-				printf("%ws\n", name_proc);
+				*pid = arr_process[i];
+				
 				break;
 			}
 		}
 	}
-
-	return true;
 }
 
 void set_name_by_pid(_In_ DWORD pid)
@@ -69,6 +69,11 @@ void set_name_by_pid(_In_ DWORD pid)
 	CloseHandle(proc);
 }
 
+void Debugger::set_privilege(_In_ bool valid)
+{
+
+}
+
 Debugger::Debugger(_In_ DWORD pid)
 {
 	this->pid = pid;
@@ -77,21 +82,34 @@ Debugger::Debugger(_In_ DWORD pid)
 void Debugger::attach()
 {
 	this->hnd_proc = OpenProcess(PROCESS_ALL_ACCESS, false, this->pid);
+	//this->set_privilege()
+	if (!DebugActiveProcess(this->pid)) {
+		this->debug_active = true;
+		std::cout << "Success attach." << std::endl;
+	}
+	else {
+		std::cout << GetLastError() << std::endl;
+	}
 }
 
 void Debugger::dettach()
 {
-
+	if (!DebugActiveProcessStop(this->pid)) {
+		this->debug_active = false;
+		std::cout << "Success dettach." << std::endl;
+	}
+	else {
+		std::cout << GetLastError() << std::endl;
+	}
 }
 
 void Debugger::read_memory()
 {
-
-}
-
-void Debugger::set_privilege(bool valid)
-{
-
+	SYSTEM_INFO info;
+	LPVOID max_addr, min_addr;
+	GetSystemInfo(&info);
+	max_addr = info.lpMaximumApplicationAddress;
+	min_addr = info.lpMinimumApplicationAddress;
 }
 
 #endif
