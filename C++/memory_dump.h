@@ -120,12 +120,18 @@ bool Debugger::set_privilege(_In_ HANDLE token, _In_ LPCTSTR name_priv, _In_ boo
 void Debugger::attach()
 {
 	this->hnd_proc = OpenProcess(PROCESS_ALL_ACCESS, false, this->pid);
+	if (this->hnd_proc == NULL) {
+		std::cout << "Failed open process" << std::endl << GetLastError() << std::endl;
+
+		return;
+	}
+
 	if (!OpenProcessToken(hnd_proc, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &this->hnd_token)) {
 		std::cout << "Failed token" << std::endl << GetLastError() << std::endl;
 
 		return;
 	}
-	if (this->set_privilege(this->hnd_token, SE_DEBUG_NAME, TRUE)) {
+	if (!this->set_privilege(this->hnd_token, SE_DEBUG_NAME, TRUE)) {
 		CloseHandle(this->hnd_token);
 
 		return;
@@ -154,10 +160,22 @@ void Debugger::dettach()
 void Debugger::read_memory()
 {
 	SYSTEM_INFO info;
-	LPVOID max_addr, min_addr;
+	LPVOID max_addr, min_addr, buf = 0;
+	SIZE_T readed_bytes;
+
 	GetSystemInfo(&info);
 	max_addr = info.lpMaximumApplicationAddress;
 	min_addr = info.lpMinimumApplicationAddress;
+
+	if (!ReadProcessMemory(this->hnd_proc, min_addr, buf, sizeof(buf), &readed_bytes)) {
+		std::cout << "Success memory read." << std::endl;
+		std::cout << buf << std::endl;
+	}
+	else {
+		std::cout << "Faield memory read." << std::endl << GetLastError() << std::endl;
+
+		return;
+	}
 }
 
 #endif
