@@ -14,7 +14,7 @@
 #define ARR_MAX 1024
 
 void check_process(_Out_ DWORD *);
-void set_name_by_pid(_In_ DWORD pid);
+void set_name_by_pid(_In_ DWORD);
 
 TCHAR name_proc[ARR_MAX];
 
