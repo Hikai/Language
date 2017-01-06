@@ -14,20 +14,21 @@
 #define ARR_MAX 1024
 
 void check_process(_Out_ DWORD *);
-void set_name_by_pid(_In_ DWORD);
+void set_name_by_pid(_In_ DWORD pid);
 
 TCHAR name_proc[ARR_MAX];
 
 class Debugger {
 private:
-	HANDLE hnd_proc = NULL;
+	HANDLE hnd_proc = NULL, hnd_token = NULL;
 	BOOL debug_active = false;
 	DWORD pid = 0;
 
-	void set_privilege(_In_ bool);
+	bool set_privilege(_In_ HANDLE, _In_ LPCTSTR, _In_ bool);
 
 public:
 	Debugger(_In_ DWORD);
+	~Debugger();
 	void attach();
 	void dettach();
 	void read_memory();
@@ -69,26 +70,73 @@ void set_name_by_pid(_In_ DWORD pid)
 	CloseHandle(proc);
 }
 
-void Debugger::set_privilege(_In_ bool valid)
-{
-
-}
-
 Debugger::Debugger(_In_ DWORD pid)
 {
 	this->pid = pid;
 }
 
+Debugger::~Debugger()
+{
+	CloseHandle(this->hnd_proc);
+	CloseHandle(this->hnd_token);
+}
+
+bool Debugger::set_privilege(_In_ HANDLE token, _In_ LPCTSTR name_priv, _In_ bool valid_privilege)
+{
+	TOKEN_PRIVILEGES token_priv, token_priv_prev;
+	LUID luid;
+	DWORD prev = sizeof(TOKEN_PRIVILEGES);
+	
+	if (!LookupPrivilegeValue(NULL, name_priv, &luid)) {
+		return false;
+	}
+
+	token_priv.PrivilegeCount = 1;
+	token_priv.Privileges[0].Attributes = 0;
+	token_priv.Privileges[0].Luid = luid;
+	AdjustTokenPrivileges(token, false, &token_priv, sizeof(TOKEN_PRIVILEGES), &token_priv_prev, &prev);
+	if (GetLastError() != ERROR_SUCCESS) {
+		return false;
+	}
+
+	token_priv_prev.PrivilegeCount = 1;
+	token_priv_prev.Privileges[0].Luid = luid;
+
+	if (valid_privilege) {
+		token_priv_prev.Privileges[0].Attributes |= (SE_PRIVILEGE_ENABLED);
+	}
+	else {
+		token_priv_prev.Privileges[0].Attributes ^= (SE_PRIVILEGE_ENABLED & token_priv_prev.Privileges[0].Attributes);
+	}
+	
+	AdjustTokenPrivileges(token, false, &token_priv_prev, prev, NULL, NULL);
+	if (GetLastError() != ERROR_SUCCESS) {
+		return false;
+	}
+
+	return true;
+}
+
 void Debugger::attach()
 {
 	this->hnd_proc = OpenProcess(PROCESS_ALL_ACCESS, false, this->pid);
-	//this->set_privilege()
+	if (!OpenProcessToken(hnd_proc, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &this->hnd_token)) {
+		std::cout << "Failed token" << std::endl << GetLastError() << std::endl;
+
+		return;
+	}
+	if (this->set_privilege(this->hnd_token, SE_DEBUG_NAME, TRUE)) {
+		CloseHandle(this->hnd_token);
+
+		return;
+	}
+
 	if (!DebugActiveProcess(this->pid)) {
 		this->debug_active = true;
 		std::cout << "Success attach." << std::endl;
 	}
 	else {
-		std::cout << GetLastError() << std::endl;
+		std::cout << "Failed attach" << std::endl << GetLastError() << std::endl;
 	}
 }
 
@@ -99,7 +147,7 @@ void Debugger::dettach()
 		std::cout << "Success dettach." << std::endl;
 	}
 	else {
-		std::cout << GetLastError() << std::endl;
+		std::cout << "Failed dettach" << std::endl << GetLastError() << std::endl;
 	}
 }
 
