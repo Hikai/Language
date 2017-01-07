@@ -21,10 +21,10 @@ TCHAR name_proc[ARR_MAX];
 class Debugger {
 private:
 	HANDLE hnd_proc = NULL, hnd_token = NULL;
-	BOOL debug_active = false;
 	DWORD pid = 0;
 
 	bool set_privilege(_In_ HANDLE, _In_ LPCTSTR, _In_ bool);
+	void get_last_error(_In_ std::string);
 
 public:
 	Debugger(_In_ DWORD);
@@ -117,17 +117,23 @@ bool Debugger::set_privilege(_In_ HANDLE token, _In_ LPCTSTR name_priv, _In_ boo
 	return true;
 }
 
+void Debugger::get_last_error(_In_ std::string func)
+{
+	std::cout << "Failed " << func.c_str() << std::endl;
+	std::cout << GetLastError() << std::endl;
+}
+
 void Debugger::attach()
 {
 	this->hnd_proc = OpenProcess(PROCESS_ALL_ACCESS, false, this->pid);
 	if (this->hnd_proc == NULL) {
-		std::cout << "Failed open process" << std::endl << GetLastError() << std::endl;
+		this->get_last_error("open process");
 
 		return;
 	}
 
 	if (!OpenProcessToken(hnd_proc, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &this->hnd_token)) {
-		std::cout << "Failed token" << std::endl << GetLastError() << std::endl;
+		this->get_last_error("open token");
 
 		return;
 	}
@@ -138,22 +144,20 @@ void Debugger::attach()
 	}
 
 	if (!DebugActiveProcess(this->pid)) {
-		this->debug_active = true;
 		std::cout << "Success attach." << std::endl;
 	}
 	else {
-		std::cout << "Failed attach" << std::endl << GetLastError() << std::endl;
+		this->get_last_error("attach");
 	}
 }
 
 void Debugger::dettach()
 {
 	if (!DebugActiveProcessStop(this->pid)) {
-		this->debug_active = false;
 		std::cout << "Success dettach." << std::endl;
 	}
 	else {
-		std::cout << "Failed dettach" << std::endl << GetLastError() << std::endl;
+		this->get_last_error("dettach");
 	}
 }
 
@@ -172,7 +176,7 @@ void Debugger::read_memory()
 		std::cout << buf << std::endl;
 	}
 	else {
-		std::cout << "Faield memory read." << std::endl << GetLastError() << std::endl;
+		this->get_last_error("read memory");
 
 		return;
 	}
