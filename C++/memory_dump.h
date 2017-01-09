@@ -139,6 +139,7 @@ void Debugger::attach()
 	}
 	if (!this->set_privilege(this->hnd_token, SE_DEBUG_NAME, TRUE)) {
 		CloseHandle(this->hnd_token);
+		this->get_last_error("not set privileges");
 
 		return;
 	}
@@ -167,28 +168,20 @@ void Debugger::read_memory()
 	MEMORY_BASIC_INFORMATION info_mem;
 	DWORD max_addr, min_addr;
 	BYTE * arr_dest;
+	SIZE_T readed;
 
 	GetSystemInfo(&info);
 	max_addr = (DWORD)info.lpMaximumApplicationAddress;
 	min_addr = (DWORD)info.lpMinimumApplicationAddress;
-
-	/*if (!ReadProcessMemory(this->hnd_proc, min_addr, buf, sizeof(buf), &readed_bytes)) {
-		std::cout << "Success memory read." << std::endl;
-		std::cout << buf << std::endl;
-	}
-	else {
-		this->get_last_error("read memory");
-
-		return;
-	}*/
 
 	do {
 		if (VirtualQueryEx(this->hnd_proc, (LPVOID)min_addr, &info_mem, sizeof(info_mem)) == sizeof(info_mem)) {
 			if ((info_mem.RegionSize > 0) && (info_mem.Type == MEM_PRIVATE) && (info_mem.State == MEM_COMMIT)) {
 				arr_dest = new BYTE[info_mem.RegionSize];
 				
-				if (!ReadProcessMemory(this->hnd_proc, info_mem.BaseAddress, arr_dest, info_mem.RegionSize, NULL)) {
+				if (!ReadProcessMemory(this->hnd_proc, info_mem.BaseAddress, arr_dest, info_mem.RegionSize, &readed)) {
 					std::cout << arr_dest << std::endl;
+					std::cout << readed << std::endl;
 				}
 				else {
 					this->get_last_error("read memory");
