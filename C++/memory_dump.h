@@ -125,7 +125,7 @@ void Debugger::get_last_error(_In_ std::string func)
 
 void Debugger::attach()
 {
-	this->hnd_proc = OpenProcess(PROCESS_ALL_ACCESS, false, this->pid);
+	this->hnd_proc = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, false, this->pid);
 	if (this->hnd_proc == NULL) {
 		this->get_last_error("open process");
 
@@ -174,25 +174,21 @@ void Debugger::read_memory()
 	max_addr = (DWORD)info.lpMaximumApplicationAddress;
 	min_addr = (DWORD)info.lpMinimumApplicationAddress;
 
-	do {
-		if (VirtualQueryEx(this->hnd_proc, (LPVOID)min_addr, &info_mem, sizeof(info_mem)) == sizeof(info_mem)) {
-			if ((info_mem.RegionSize > 0) && (info_mem.Type == MEM_PRIVATE) && (info_mem.State == MEM_COMMIT)) {
-				arr_dest = new BYTE[info_mem.RegionSize];
-				
-				if (!ReadProcessMemory(this->hnd_proc, info_mem.BaseAddress, arr_dest, info_mem.RegionSize, &readed)) {
-					std::cout << arr_dest << std::endl;
-					std::cout << readed << std::endl;
-				}
-				else {
-					this->get_last_error("read memory");
-				}
+	while (min_addr < max_addr) {
+		VirtualQueryEx(this->hnd_proc, (LPVOID)min_addr, &info_mem, sizeof(info_mem));
 
-				delete arr_dest;
+		if ((info_mem.State == MEM_COMMIT) && (info_mem.Protect == PAGE_READWRITE)) {
+			arr_dest = new BYTE[info_mem.RegionSize];
+			
+			ReadProcessMemory(this->hnd_proc, info_mem.BaseAddress, arr_dest, info_mem.RegionSize, &readed);
+
+			for (SIZE_T i = 0; i < info_mem.RegionSize; i++) {
+				std::cout << arr_dest[i] << std::endl;
 			}
 		}
+	}
 
-		min_addr = (DWORD)info_mem.BaseAddress + (DWORD)info_mem.RegionSize;
-	} while (min_addr < max_addr);
+	std::cout << "End read meory" << std::endl;
 }
 
 #endif
