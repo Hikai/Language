@@ -167,7 +167,8 @@ void Debugger::read_memory()
 	SYSTEM_INFO info;
 	MEMORY_BASIC_INFORMATION info_mem;
 	DWORD max_addr, min_addr;
-	BYTE * arr_dest;
+	BYTE **store = nullptr;
+	BYTE *arr_dest;
 	SIZE_T readed;
 
 	GetSystemInfo(&info);
@@ -183,11 +184,12 @@ void Debugger::read_memory()
 			ReadProcessMemory(this->hnd_proc, info_mem.BaseAddress, arr_dest, info_mem.RegionSize, &readed);
 
 			for (SIZE_T i = 0; i < info_mem.RegionSize; i++) {
-				std::cout << arr_dest[i] << std::endl;
+				**store += arr_dest[i];
 			}
 		}
 	}
 
+	std::cout << **store << std::endl;
 	std::cout << "End read meory" << std::endl;
 }
 
