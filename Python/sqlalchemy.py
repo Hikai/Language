@@ -9,10 +9,10 @@ from sqlalchemy import Column, Integer, String
 BASE = declarative_base()
 
 
-class ApkData(BASE):
+class User(BASE):
     """Table table class."""
 
-    __tablename__ = "apk_data"
+    __tablename__ = "users"
     no = Column(Integer, primary_key=True)
     name = Column(String)
     age = Column(Integer)
