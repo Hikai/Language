@@ -6,6 +6,7 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 
+#include<fstream>
 #include<iostream>
 #include<windows.h>
 #include<string.h>
@@ -23,6 +24,7 @@ private:
 	HANDLE hnd_proc = NULL, hnd_token = NULL;
 	DWORD pid = 0;
 
+	void binary_save(_In_ BYTE *);
 	bool set_privilege(_In_ HANDLE, _In_ LPCTSTR, _In_ bool);
 	void get_last_error(_In_ std::string);
 
@@ -79,6 +81,12 @@ Debugger::~Debugger()
 {
 	CloseHandle(this->hnd_proc);
 	CloseHandle(this->hnd_token);
+}
+
+void Debugger::binary_save(_In_ BYTE *buf)
+{
+	std::ofstream file_out("dump.exe", std::ofstream::binary);
+	file_out.write((const char *)&buf, sizeof(buf));
 }
 
 bool Debugger::set_privilege(_In_ HANDLE token, _In_ LPCTSTR name_priv, _In_ bool valid_privilege)
