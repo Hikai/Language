@@ -8,17 +8,12 @@
 
 #include<fstream>
 #include<iostream>
-#include<tchar.h>
 #include<windows.h>
 #include<string.h>
 #include<psapi.h>
+#include<TlHelp32.h>
 
-#define ARR_MAX 1024
-
-void check_process(_Out_ DWORD *);
-void set_name_by_pid(_In_ DWORD);
-
-TCHAR name_proc[ARR_MAX];
+DWORD check_process(_In_ const std::wstring&);
 
 class Debugger {
 private:
@@ -36,41 +31,34 @@ public:
 	void dettach();
 	void read_memory();
 };
-
-void check_process(_Out_ DWORD *pid)
+	
+DWORD check_process(_In_ const std::wstring& processName)
 {
-	DWORD arr_process[ARR_MAX], bytes_proc, max_proc;
-	if (!EnumProcesses(arr_process, sizeof(arr_process), &bytes_proc)) {
-		std::cout << "Process enumerate failed." << std::endl;
-		return;
+	PROCESSENTRY32 entry_proc;
+	entry_proc.dwSize = sizeof(entry_proc);
+
+	HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
+	if (snapshot == INVALID_HANDLE_VALUE)
+		return 0;
+
+	Process32First(snapshot, &entry_proc);
+	if (!processName.compare(entry_proc.szExeFile))
+	{
+		CloseHandle(snapshot);
+		return entry_proc.th32ProcessID;
 	}
 
-	max_proc = bytes_proc / sizeof(DWORD);
-
-	for (unsigned int i = 0; i < max_proc; i++) {
-		if (arr_process[i] != 0) {
-			set_name_by_pid(arr_process[i]);
-			if (!wcscmp(name_proc, TEXT("cmd.exe"))) {
-				*pid = arr_process[i];
-				
-				break;
-			}
+	while (Process32Next(snapshot, &entry_proc))
+	{
+		if (!processName.compare(entry_proc.szExeFile))
+		{
+			CloseHandle(snapshot);
+			return entry_proc.th32ProcessID;
 		}
 	}
-}
 
-void set_name_by_pid(_In_ DWORD pid)
-{
-	HANDLE proc = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, FALSE, pid);
-	if (proc != NULL) {
-		HMODULE module;
-		DWORD bytes_module;
-
-		if (EnumProcessModules(proc, &module, sizeof(module), &bytes_module)) {
-			GetModuleBaseName(proc, module, name_proc, sizeof(name_proc) / sizeof(TCHAR));
-		}
-	}
-	CloseHandle(proc);
+	CloseHandle(snapshot);
+	return 0;
 }
 
 Debugger::Debugger(_In_ DWORD pid)
@@ -159,6 +147,8 @@ void Debugger::attach()
 	}
 	else {
 		this->get_last_error("attach");
+
+		return;
 	}
 }
 
@@ -169,6 +159,8 @@ void Debugger::dettach()
 	}
 	else {
 		this->get_last_error("dettach");
+
+		return;
 	}
 }
 
@@ -185,6 +177,7 @@ void Debugger::read_memory()
 	min_addr = (DWORD)info.lpMinimumApplicationAddress;
 
 	while (min_addr < max_addr) {
+		std::cout << "Min: " << min_addr << "\nMax: " << max_addr << std::endl;
 		VirtualQueryEx(this->hnd_proc, (LPVOID)min_addr, &info_mem, sizeof(info_mem));
 
 		if ((info_mem.State & MEM_COMMIT) && (info_mem.Protect & PAGE_READWRITE)) {
@@ -194,9 +187,12 @@ void Debugger::read_memory()
 
 			for (SIZE_T i = 0; i < info_mem.RegionSize; i++) {
 				//this->binary_save(arr_dest);
+				std::cout << i << readed << std::endl;
 				std::cout << *arr_dest << std::endl;
 			}
 		}
+		
+		min_addr += (DWORD)info_mem.BaseAddress + (DWORD)info_mem.RegionSize;
 	}
 
 	std::cout << "End read meory" << std::endl;
