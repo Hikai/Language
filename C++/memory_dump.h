@@ -13,7 +13,7 @@
 #include<psapi.h>
 #include<TlHelp32.h>
 
-DWORD check_process();
+DWORD check_process(_In_ wchar_t *);
 
 class Debugger {
 private:
@@ -32,7 +32,7 @@ public:
 	void read_memory();
 };
 	
-DWORD check_process()
+DWORD check_process(_In_ wchar_t * name_proc)
 {
 	HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
 	PROCESSENTRY32 proc_entry;
@@ -42,7 +42,7 @@ DWORD check_process()
 	{
 		while (Process32Next(snapshot, &proc_entry) == TRUE)
 		{
-			if (_wcsicmp(proc_entry.szExeFile, L"cmd.exe") == 0)
+			if (_wcsicmp(proc_entry.szExeFile, name_proc) == 0)
 			{
 				return proc_entry.th32ProcessID;
 			}
