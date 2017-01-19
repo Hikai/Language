@@ -8,6 +8,7 @@
 
 #include<fstream>
 #include<iostream>
+#include<tchar.h>
 #include<windows.h>
 #include<string.h>
 #include<psapi.h>
@@ -21,11 +22,11 @@ TCHAR name_proc[ARR_MAX];
 
 class Debugger {
 private:
-	HANDLE hnd_proc = NULL, hnd_token = NULL;
+	HANDLE hnd_proc = NULL, hnd_me_token = NULL;
 	DWORD pid = 0;
 
 	void binary_save(_In_ BYTE *);
-	bool set_privilege(_In_ HANDLE, _In_ LPCTSTR, _In_ bool);
+	bool set_privilege(_In_ HANDLE, _In_ LPCTSTR, _In_ BOOL);
 	void get_last_error(_In_ std::string);
 
 public:
@@ -80,45 +81,45 @@ Debugger::Debugger(_In_ DWORD pid)
 Debugger::~Debugger()
 {
 	CloseHandle(this->hnd_proc);
-	CloseHandle(this->hnd_token);
+	CloseHandle(this->hnd_me_token);
 }
 
 void Debugger::binary_save(_In_ BYTE *buf)
 {
-	std::ofstream file_out("dump.exe", std::ofstream::binary);
+	std::ofstream file_out("dump.exe", std::ofstream::out | std::ofstream::binary | std::ofstream::app);
 	file_out.write((const char *)&buf, sizeof(buf));
 }
 
-bool Debugger::set_privilege(_In_ HANDLE token, _In_ LPCTSTR name_priv, _In_ bool valid_privilege)
+bool Debugger::set_privilege(_In_ HANDLE token, _In_ LPCTSTR name_priv, _In_ BOOL valid_privilege)
 {
-	TOKEN_PRIVILEGES token_priv, token_priv_prev;
+	TOKEN_PRIVILEGES token_priv;
 	LUID luid;
-	DWORD prev = sizeof(TOKEN_PRIVILEGES);
-	
+
 	if (!LookupPrivilegeValue(NULL, name_priv, &luid)) {
+		this->get_last_error("LookupPrivilegeValue");
+
 		return false;
 	}
 
 	token_priv.PrivilegeCount = 1;
-	token_priv.Privileges[0].Attributes = 0;
 	token_priv.Privileges[0].Luid = luid;
-	AdjustTokenPrivileges(token, false, &token_priv, sizeof(TOKEN_PRIVILEGES), &token_priv_prev, &prev);
-	if (GetLastError() != ERROR_SUCCESS) {
+
+	if (valid_privilege) {
+		token_priv.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+	}
+	else {
+		token_priv.Privileges[0].Attributes = 0;
+	}
+
+	if (!AdjustTokenPrivileges(this->hnd_me_token, false, &token_priv, sizeof(TOKEN_PRIVILEGES), (PTOKEN_PRIVILEGES)NULL, (PDWORD)NULL)) {
+		this->get_last_error("AdjustTokenPrivileges");
+
 		return false;
 	}
 
-	token_priv_prev.PrivilegeCount = 1;
-	token_priv_prev.Privileges[0].Luid = luid;
+	if (GetLastError() == ERROR_NOT_ALL_ASSIGNED) {
+		this->get_last_error("specified privilege");
 
-	if (valid_privilege) {
-		token_priv_prev.Privileges[0].Attributes |= (SE_PRIVILEGE_ENABLED);
-	}
-	else {
-		token_priv_prev.Privileges[0].Attributes ^= (SE_PRIVILEGE_ENABLED & token_priv_prev.Privileges[0].Attributes);
-	}
-	
-	AdjustTokenPrivileges(token, false, &token_priv_prev, prev, NULL, NULL);
-	if (GetLastError() != ERROR_SUCCESS) {
 		return false;
 	}
 
@@ -140,13 +141,14 @@ void Debugger::attach()
 		return;
 	}
 
-	if (!OpenProcessToken(hnd_proc, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &this->hnd_token)) {
+	if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &this->hnd_me_token)) {
 		this->get_last_error("open token");
 
 		return;
 	}
-	if (!this->set_privilege(this->hnd_token, SE_DEBUG_NAME, TRUE)) {
-		CloseHandle(this->hnd_token);
+
+	if (!this->set_privilege(this->hnd_me_token, L"SeDebugPrivilege", true)) {
+		CloseHandle(this->hnd_me_token);
 		this->get_last_error("not set privileges");
 
 		return;
@@ -175,7 +177,6 @@ void Debugger::read_memory()
 	SYSTEM_INFO info;
 	MEMORY_BASIC_INFORMATION info_mem;
 	DWORD max_addr, min_addr;
-	BYTE **store = nullptr;
 	BYTE *arr_dest;
 	SIZE_T readed;
 
@@ -186,18 +187,18 @@ void Debugger::read_memory()
 	while (min_addr < max_addr) {
 		VirtualQueryEx(this->hnd_proc, (LPVOID)min_addr, &info_mem, sizeof(info_mem));
 
-		if ((info_mem.State == MEM_COMMIT) && (info_mem.Protect == PAGE_READWRITE)) {
+		if ((info_mem.State & MEM_COMMIT) && (info_mem.Protect & PAGE_READWRITE)) {
 			arr_dest = new BYTE[info_mem.RegionSize];
 			
 			ReadProcessMemory(this->hnd_proc, info_mem.BaseAddress, arr_dest, info_mem.RegionSize, &readed);
 
 			for (SIZE_T i = 0; i < info_mem.RegionSize; i++) {
-				**store += arr_dest[i];
+				//this->binary_save(arr_dest);
+				std::cout << *arr_dest << std::endl;
 			}
 		}
 	}
 
-	std::cout << **store << std::endl;
 	std::cout << "End read meory" << std::endl;
 }
 
