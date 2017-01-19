@@ -13,7 +13,7 @@
 #include<psapi.h>
 #include<TlHelp32.h>
 
-DWORD check_process(_In_ const std::wstring&);
+DWORD check_process();
 
 class Debugger {
 private:
@@ -32,32 +32,24 @@ public:
 	void read_memory();
 };
 	
-DWORD check_process(_In_ const std::wstring& processName)
+DWORD check_process()
 {
-	PROCESSENTRY32 entry_proc;
-	entry_proc.dwSize = sizeof(entry_proc);
-
 	HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
-	if (snapshot == INVALID_HANDLE_VALUE)
-		return 0;
+	PROCESSENTRY32 proc_entry;
+	proc_entry.dwSize = sizeof(PROCESSENTRY32);
 
-	Process32First(snapshot, &entry_proc);
-	if (!processName.compare(entry_proc.szExeFile))
+	if (Process32First(snapshot, &proc_entry) == TRUE)
 	{
-		CloseHandle(snapshot);
-		return entry_proc.th32ProcessID;
-	}
-
-	while (Process32Next(snapshot, &entry_proc))
-	{
-		if (!processName.compare(entry_proc.szExeFile))
+		while (Process32Next(snapshot, &proc_entry) == TRUE)
 		{
-			CloseHandle(snapshot);
-			return entry_proc.th32ProcessID;
+			if (_wcsicmp(proc_entry.szExeFile, L"cmd.exe") == 0)
+			{
+				return proc_entry.th32ProcessID;
+			}
 		}
 	}
-
 	CloseHandle(snapshot);
+
 	return 0;
 }
 
