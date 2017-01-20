@@ -68,6 +68,7 @@ void Debugger::binary_save(_In_ BYTE *buf)
 {
 	std::ofstream file_out("dump.exe", std::ofstream::out | std::ofstream::binary | std::ofstream::app);
 	file_out.write((const char *)&buf, sizeof(buf));
+	file_out.close();
 }
 
 bool Debugger::set_privilege(_In_ HANDLE token, _In_ LPCTSTR name_priv, _In_ BOOL valid_privilege)
