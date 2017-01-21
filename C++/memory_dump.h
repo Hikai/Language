@@ -177,10 +177,13 @@ void Debugger::read_memory()
 			arr_dest = new BYTE[info_mem.RegionSize];
 			
 			ReadProcessMemory(this->hnd_proc, info_mem.BaseAddress, arr_dest, info_mem.RegionSize, &readed);
+			this->get_last_error("readmemory test");
+			std::cout << readed << std::endl;
+			std::cout << min_addr << std::endl;
+			std::cout << max_addr << std::endl;
 
 			for (SIZE_T i = 0; i < info_mem.RegionSize; i++) {
 				//this->binary_save(arr_dest);
-				std::cout << i << readed << std::endl;
 				std::cout << *arr_dest << std::endl;
 			}
 		}
