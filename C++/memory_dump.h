@@ -183,7 +183,7 @@ void Debugger::read_memory()
 			std::cout << max_addr << std::endl;
 
 			for (SIZE_T i = 0; i < info_mem.RegionSize; i++) {
-				//this->binary_save(arr_dest);
+				this->binary_save(arr_dest);
 				std::cout << *arr_dest << std::endl;
 			}
 		}
