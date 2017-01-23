@@ -71,6 +71,7 @@ void Debugger::binary_save(_In_ BYTE *buf)
 	file_out.close();
 }
 
+// This method need administrator permission.
 bool Debugger::set_privilege(_In_ HANDLE token, _In_ LPCTSTR name_priv, _In_ BOOL valid_privilege)
 {
 	TOKEN_PRIVILEGES token_priv;
