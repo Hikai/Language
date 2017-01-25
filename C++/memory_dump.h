@@ -27,7 +27,7 @@ private:
 public:
 	Debugger(_In_ DWORD);
 	~Debugger();
-	void attach();
+	bool attach();
 	void dettach();
 	void read_memory();
 };
@@ -71,7 +71,6 @@ void Debugger::binary_save(_In_ BYTE *buf)
 	file_out.close();
 }
 
-// This method need administrator permission.
 bool Debugger::set_privilege(_In_ HANDLE token, _In_ LPCTSTR name_priv, _In_ BOOL valid_privilege)
 {
 	TOKEN_PRIVILEGES token_priv;
@@ -114,26 +113,27 @@ void Debugger::get_last_error(_In_ std::string func)
 	std::cout << GetLastError() << std::endl;
 }
 
-void Debugger::attach()
+// Trying attach, target process is deaded.
+bool Debugger::attach()
 {
 	this->hnd_proc = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, false, this->pid);
 	if (this->hnd_proc == NULL) {
 		this->get_last_error("open process");
 
-		return;
+		return false;
 	}
 
 	if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &this->hnd_me_token)) {
 		this->get_last_error("open token");
 
-		return;
+		return false;
 	}
 
 	if (!this->set_privilege(this->hnd_me_token, L"SeDebugPrivilege", true)) {
 		CloseHandle(this->hnd_me_token);
 		this->get_last_error("not set privileges");
 
-		return;
+		return false;
 	}
 
 	if (!DebugActiveProcess(this->pid)) {
@@ -142,8 +142,10 @@ void Debugger::attach()
 	else {
 		this->get_last_error("attach");
 
-		return;
+		return false;
 	}
+
+	return true;
 }
 
 void Debugger::dettach()
@@ -173,6 +175,7 @@ void Debugger::read_memory()
 	while (min_addr < max_addr) {
 		std::cout << "Min: " << min_addr << "\nMax: " << max_addr << std::endl;
 		VirtualQueryEx(this->hnd_proc, (LPVOID)min_addr, &info_mem, sizeof(info_mem));
+		this->get_last_error("virtualqueryex test");
 
 		if ((info_mem.State & MEM_COMMIT) && (info_mem.Protect & PAGE_READWRITE)) {
 			arr_dest = new BYTE[info_mem.RegionSize];
