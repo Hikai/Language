@@ -7,11 +7,6 @@ Shinseok-shop parse.
 """
 from bs4 import BeautifulSoup
 from selenium import webdriver
-import re
-
-
-# RE_TITLE = re.compile('<a class="grade_[1-9]" href="(?:.*)">(.*)</a>')
-RE_SS = re.compile("<em>(.*)</em>")
 
 
 class Parse():
@@ -24,27 +19,29 @@ class Parse():
         self.source = driver.page_source
         driver.quit()
         self.soup = BeautifulSoup(self.source, "html.parser")
+        self.soup = self.soup.select("#container > \
+                                      div.boxTheme.wrapNshopNshinseok > \
+                                      article > div.wrapShinseok > div > div >\
+                                       ul > li")
 
-    def parse_title(self):
+    def parse_data(self):
         """Parse shinseok-shop today item title method."""
-        names = self.soup.findAll("h2", {"class": "title"})
-        for name in names:
-            # print(name.contents)
-            print(name)
+        dict_item = {}
+        for li in self.soup:
+            name = li.select('a')[0].string
+            shinseok = li.select("em")[0].string
+            dict_item.update({name: shinseok})
 
-    def parse_shinseok(self):
-        """Parse shinseok-shop today item shinseok method."""
-        shinseoks = self.soup.findAll("span", {"class": "shinseok"})
-        for shinseok in shinseoks:
-            num_shinseok = filter(RE_SS.match, shinseok.contents)
-            print(str(num_shinseok))
+        return dict_item
 
 
 def main():
     """Main function."""
     parser = Parse("http://bns.plaync.com")
-    parser.parse_title()
-    parser.parse_shinseok()
+    item = parser.parse_data()
+    for key in item:
+        print(key)
+        print(item[key])
 
 
 if __name__ == "__main__":
