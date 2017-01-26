@@ -27,7 +27,7 @@ private:
 public:
 	Debugger(_In_ DWORD);
 	~Debugger();
-	bool attach();
+	void attach();
 	void dettach();
 	void read_memory();
 };
@@ -113,27 +113,26 @@ void Debugger::get_last_error(_In_ std::string func)
 	std::cout << GetLastError() << std::endl;
 }
 
-// Trying attach, target process is deaded.
-bool Debugger::attach()
+void Debugger::attach()
 {
 	this->hnd_proc = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, false, this->pid);
 	if (this->hnd_proc == NULL) {
 		this->get_last_error("open process");
 
-		return false;
+		return;
 	}
 
 	if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &this->hnd_me_token)) {
 		this->get_last_error("open token");
 
-		return false;
+		return;
 	}
 
 	if (!this->set_privilege(this->hnd_me_token, L"SeDebugPrivilege", true)) {
 		CloseHandle(this->hnd_me_token);
 		this->get_last_error("not set privileges");
 
-		return false;
+		return;
 	}
 
 	if (!DebugActiveProcess(this->pid)) {
@@ -142,10 +141,8 @@ bool Debugger::attach()
 	else {
 		this->get_last_error("attach");
 
-		return false;
+		return;
 	}
-
-	return true;
 }
 
 void Debugger::dettach()
@@ -160,6 +157,7 @@ void Debugger::dettach()
 	}
 }
 
+// Infi loop issue.
 void Debugger::read_memory()
 {
 	SYSTEM_INFO info;
@@ -187,12 +185,12 @@ void Debugger::read_memory()
 			std::cout << max_addr << std::endl;
 
 			for (SIZE_T i = 0; i < info_mem.RegionSize; i++) {
-				this->binary_save(arr_dest);
+				//this->binary_save(arr_dest);
 				std::cout << *arr_dest << std::endl;
 			}
 		}
 		
-		min_addr += (DWORD)info_mem.BaseAddress + (DWORD)info_mem.RegionSize;
+		min_addr += (DWORD)info_mem.RegionSize;
 	}
 
 	std::cout << "End read meory" << std::endl;
