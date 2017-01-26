@@ -157,7 +157,6 @@ void Debugger::dettach()
 	}
 }
 
-// Infi loop issue.
 void Debugger::read_memory()
 {
 	SYSTEM_INFO info;
@@ -170,8 +169,7 @@ void Debugger::read_memory()
 	max_addr = (DWORD)info.lpMaximumApplicationAddress;
 	min_addr = (DWORD)info.lpMinimumApplicationAddress;
 
-	while (min_addr < max_addr) {
-		std::cout << "Min: " << min_addr << "\nMax: " << max_addr << std::endl;
+	while (min_addr <= max_addr) {
 		VirtualQueryEx(this->hnd_proc, (LPVOID)min_addr, &info_mem, sizeof(info_mem));
 		this->get_last_error("virtualqueryex test");
 
@@ -189,7 +187,8 @@ void Debugger::read_memory()
 				std::cout << *arr_dest << std::endl;
 			}
 		}
-		
+
+		std::cout << "Min: " << min_addr << "\nMax: " << max_addr << "\nRegion size: " << info_mem.RegionSize << std::endl;
 		min_addr += (DWORD)info_mem.RegionSize;
 	}
 
