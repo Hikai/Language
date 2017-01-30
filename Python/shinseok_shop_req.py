@@ -15,21 +15,20 @@ class Parse():
         """Initalize method."""
         source = requests.get(url)
         self.soup = BeautifulSoup(source.text, "html.parser")
-        self.soup_select = self.soup.select("body > div > div > ul > li")
-        # select issue
+        self.soup = self.soup.select("div.boxThemeContents > ul.list \
+                                            > li")
 
     def parse_data(self):
         """Parse data method."""
-        # dict_item = {}
-        # for li in self.soup:
-        #     name = li.select('a')[0].string
-        #     shinseok = li.select("em")[0].string
-        #     dict_item.update({name: shinseok})
+        dict_item = {}
+        for li in self.soup:
+            name = li.select('a')[0].string
+            shinseok = li.select("em")[0].string
+            print(name)
+            print(shinseok)
+            dict_item.update({name: shinseok})
 
-        # return dict_item
-        print(self.soup)
-        print("-------")
-        print(self.soup_select)  # print "[]"
+        return dict_item
 
 
 def main():
