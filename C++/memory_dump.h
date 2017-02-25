@@ -20,15 +20,15 @@ private:
 	HANDLE hnd_proc = NULL, hnd_me_token = NULL;
 	DWORD pid = 0;
 
+	void create_file();
 	void binary_save(_In_ BYTE *);
 	bool set_privilege(_In_ HANDLE, _In_ LPCTSTR, _In_ BOOL);
 	void get_last_error(_In_ std::string);
+	BOOL attach();
 
 public:
 	Debugger(_In_ DWORD);
 	~Debugger();
-	void attach();
-	void dettach();
 	void read_memory();
 };
 	
@@ -56,12 +56,23 @@ DWORD check_process(_In_ wchar_t * name_proc)
 Debugger::Debugger(_In_ DWORD pid)
 {
 	this->pid = pid;
+
+	if (!this->attach()) {
+		return;
+	}
 }
 
 Debugger::~Debugger()
 {
 	CloseHandle(this->hnd_proc);
 	CloseHandle(this->hnd_me_token);
+}
+
+void Debugger::create_file()
+{
+	std::ofstream file_out("dump.exe");
+	file_out << "start" << std::endl;
+	file_out.close();
 }
 
 void Debugger::binary_save(_In_ BYTE *buf)
@@ -77,9 +88,9 @@ bool Debugger::set_privilege(_In_ HANDLE token, _In_ LPCTSTR name_priv, _In_ BOO
 	LUID luid;
 
 	if (!LookupPrivilegeValue(NULL, name_priv, &luid)) {
-		this->get_last_error("LookupPrivilegeValue");
+		this->get_last_error("failed LookupPrivilegeValue.");
 
-		return false;
+		return FALSE;
 	}
 
 	token_priv.PrivilegeCount = 1;
@@ -92,104 +103,83 @@ bool Debugger::set_privilege(_In_ HANDLE token, _In_ LPCTSTR name_priv, _In_ BOO
 		token_priv.Privileges[0].Attributes = 0;
 	}
 
-	if (!AdjustTokenPrivileges(this->hnd_me_token, false, &token_priv, sizeof(TOKEN_PRIVILEGES), (PTOKEN_PRIVILEGES)NULL, (PDWORD)NULL)) {
-		this->get_last_error("AdjustTokenPrivileges");
+	if (!AdjustTokenPrivileges(this->hnd_me_token, FALSE, &token_priv, sizeof(TOKEN_PRIVILEGES), (PTOKEN_PRIVILEGES)NULL, (PDWORD)NULL)) {
+		this->get_last_error("failed AdjustTokenPrivileges.");
 
-		return false;
+		return FALSE;
 	}
 
 	if (GetLastError() == ERROR_NOT_ALL_ASSIGNED) {
-		this->get_last_error("specified privilege");
+		this->get_last_error("failed specified privilege.");
 
-		return false;
+		return FALSE;
 	}
 
-	return true;
+	return TRUE;
 }
 
 void Debugger::get_last_error(_In_ std::string func)
 {
-	std::cout << "Failed " << func.c_str() << std::endl;
+	std::cout << func.c_str() << std::endl;
 	std::cout << GetLastError() << std::endl;
 }
 
-void Debugger::attach()
+BOOL Debugger::attach()
 {
-	this->hnd_proc = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, false, this->pid);
+	this->hnd_proc = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, FALSE, this->pid);
 	if (this->hnd_proc == NULL) {
-		this->get_last_error("open process");
+		this->get_last_error("failed open process.");
 
-		return;
+		return FALSE;
 	}
 
 	if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &this->hnd_me_token)) {
-		this->get_last_error("open token");
+		this->get_last_error("failed open token.");
 
-		return;
+		return FALSE;
 	}
 
-	if (!this->set_privilege(this->hnd_me_token, L"SeDebugPrivilege", true)) {
+	if (!this->set_privilege(this->hnd_me_token, L"SeDebugPrivilege", TRUE)) {
 		CloseHandle(this->hnd_me_token);
-		this->get_last_error("not set privileges");
+		this->get_last_error("failed set privileges");
 
-		return;
+		return FALSE;
 	}
 
-	if (!DebugActiveProcess(this->pid)) {
-		std::cout << "Success attach." << std::endl;
-	}
-	else {
-		this->get_last_error("attach");
-
-		return;
-	}
-}
-
-void Debugger::dettach()
-{
-	if (!DebugActiveProcessStop(this->pid)) {
-		std::cout << "Success dettach." << std::endl;
-	}
-	else {
-		this->get_last_error("dettach");
-
-		return;
-	}
+	this->get_last_error("success attach");
+	return TRUE;
 }
 
 void Debugger::read_memory()
 {
 	SYSTEM_INFO info;
-	MEMORY_BASIC_INFORMATION info_mem;
-	DWORD max_addr, min_addr;
+	MEMORY_BASIC_INFORMATION64 info_mem;
+	ULONGLONG max_addr, min_addr_cur;
 	BYTE *arr_dest;
 	SIZE_T readed;
 
 	GetSystemInfo(&info);
-	max_addr = (DWORD)info.lpMaximumApplicationAddress;
-	min_addr = (DWORD)info.lpMinimumApplicationAddress;
+	max_addr = (ULONGLONG)info.lpMaximumApplicationAddress;
+	min_addr_cur = (ULONGLONG)info.lpMinimumApplicationAddress;
 
-	while (min_addr <= max_addr) {
-		VirtualQueryEx(this->hnd_proc, (LPVOID)min_addr, &info_mem, sizeof(info_mem));
-		this->get_last_error("virtualqueryex test");
+	this->create_file();
+
+	while (min_addr_cur <= max_addr) {
+		VirtualQueryEx(this->hnd_proc, (LPVOID)min_addr_cur, (PMEMORY_BASIC_INFORMATION)&info_mem, sizeof(info_mem));
 
 		if ((info_mem.State & MEM_COMMIT) && (info_mem.Protect & PAGE_READWRITE)) {
 			arr_dest = new BYTE[info_mem.RegionSize];
 			
-			ReadProcessMemory(this->hnd_proc, info_mem.BaseAddress, arr_dest, info_mem.RegionSize, &readed);
-			this->get_last_error("readmemory test");
-			std::cout << readed << std::endl;
-			std::cout << min_addr << std::endl;
-			std::cout << max_addr << std::endl;
-
+			ReadProcessMemory(this->hnd_proc, (LPCVOID) info_mem.BaseAddress, arr_dest, info_mem.RegionSize, &readed);
+			
 			for (SIZE_T i = 0; i < info_mem.RegionSize; i++) {
-				//this->binary_save(arr_dest);
-				std::cout << *arr_dest << std::endl;
+				std::cout << std::hex << arr_dest[i];
 			}
+
 		}
 
-		std::cout << "Min: " << min_addr << "\nMax: " << max_addr << "\nRegion size: " << info_mem.RegionSize << std::endl;
-		min_addr += (DWORD)info_mem.RegionSize;
+		std::cout << std::hex << "Min: " << min_addr_cur << "\nMax: " << max_addr << "\nRegion size: " << info_mem.RegionSize << std::endl;
+		min_addr_cur += info_mem.RegionSize;
 	}
 
 	std::cout << "End read meory" << std::endl;
