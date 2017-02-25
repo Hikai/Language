@@ -2,19 +2,26 @@
 
 int main(void)
 {
-    DWORD pid = 0;
+	DWORD pid = 0;
+	wchar_t name_proc[1024] = TEXT("");
 
-    std::cout << "Search process." << std::endl;
-    while (pid == 0) {
-        pid = check_process(L"cmd.exe");
-    }
-     
-    std::cout << pid << " found process id." << std::endl;
+	std::cout << "enter process name: ";
+	std::wcin >> name_proc;
+	std::cout << "search process . . ." << std::endl;
+	int cnt = 0;
+	while (pid == 0) {
+		pid = check_process(name_proc);
 
-    Debugger debugger(pid);
-    debugger.attach();
-    debugger.read_memory();
-    debugger.dettach();
+		Sleep(1000);
+		if (cnt++ == 10) {
+			break;
+		}
+	}
+	 
+	std::cout << pid << " found process id." << std::endl;
 
-    return 0;
+	Debugger debugger(pid);
+	debugger.read_memory();
+
+	return 0;
 }
