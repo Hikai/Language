@@ -44,20 +44,35 @@ class DcWrite():
 
             time.sleep(1)
 
-    def get_parse_data(self, query, selector):
+    def parse_data(self, query, selector):
         """Method return need key to submit in write page."""
         return query(selector)[0].get("value")
 
     def get_post_data(self, html):
         """Method return post form data in write page."""
+        data = dict()
         query = PyQuery(html)
-        block_key = self.get_post_data(query, "input#block_key")
-        ci_t = self.get_post_data(query, "input[name=ci_t]")
-        r_key = self.get_post_data(query, "input#r_key")
-        gallery_no = self.get_post_data(query, "input[name=gallery_no]")
-        c_key = self.get_post_data(query, "input[name=c_key]")
+        data["block_key"] = self.parse_data(query, "input#block_key")
+        data["ci_t"] = self.parse_data(query, "input[name=ci_t]")
+        data["r_key"] = self.parse_data(query, "input#r_key")
+        data["gallery_no"] = self.parse_data(query,
+                                             "input[name=gallery_no]")
+        data["c_key"] = self.parse_data(query, "input[name=c_key]")
+        data["upload_status"] = self.parse_data(query,
+                                                "input#upload_status")
+        data["clickbutton"] = self.parse_data(query, "input#clickbutton")
+        data["vid"] = self.parse_data(query, "input#vid")
+        data["ipt_movieCompType"] = self.parse_data(query,
+                                                    "input#ipt_movieCompType")
+        data["isMovie"] = self.parse_data(query, "input#isMovie")
+        data["user_ip"] = self.parse_data(query, "input#user_ip")
+        data["block_key"] = self.parse_data(query, "input#block_key")
+        data["ehqo_W"] = self.parse_data(query, "input#ehqo_W")
+        data["dcs_key"] = self.parse_data(query, "input#dcs_key")
+        data["cur_t"] = self.parse_data(query, "input#cur_t")
+        data["service_code"] = self.parse_data(query, "input#service_code")
 
-        return block_key, ci_t, r_key, gallery_no, c_key
+        return data
 
     def get_write_html(self):
         """Method return write page html."""
@@ -67,9 +82,10 @@ class DcWrite():
         """Running method."""
         self.set_session()
         page = self.get_write_html()
-        block_key, ci_t, r_key, gallery_no = self.get_post_data(page)
-        block_key = self.get_block_key(block_key, ci_t)
-        self.submit(block_key, ci_t, r_key)
+        data_post = self.get_post_data(page)
+        print(data_post)
+        # block_key = self.get_block_key(block_key, ci_t)
+        # self.submit(block_key, ci_t, r_key)
 
     def set_session(self):
         """Method set request session."""
@@ -90,23 +106,3 @@ class DcWrite():
 
 test = DcWrite("bns", "test", "test", "test", "test")
 test.run()
-
-# url = "http://gall.dcinside.com/board/write/?id=programming"
-# page = requests.get(url).text
-# query = PyQuery(page)
-# ci_t = query("input[name=ci_t]")[0].get("value")
-# g_id = query("input#id")[0].get("value")
-# r_key = query("iput#r_key")[0].get("value")
-# gallery_no = query("input#gallery_no")[0].get("value")
-# c_key = query("input#c_key")[0].get("value")
-# upload_status = query("input#upload_status")[0].get("value")
-# clickbutton = query("input#clickbutton")[0].get("value")
-# vid = query("input#vid")[0].get("value")
-# ipt_movieComptype = query("input#ipt_movieCompType")[0].get("value")
-# isMovie = query("input#isMovie")[0].get("value")
-# user_ip = query("input#user_ip")[0].get("value")
-# block_key = query("input#block_key")[0].get("value")
-# ehqo_W = query("input#ehqo_W")[0].get("value")
-# dcs_key = query("input#dcs_key")[0].get("value")
-# cur_t = query("input#cur_t")[0].get("value")
-# servie_code = query("input#service_code")[0].get("value")
