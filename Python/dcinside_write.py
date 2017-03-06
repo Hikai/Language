@@ -46,7 +46,8 @@ class DcWrite():
 
     def parse_data(self, query, selector):
         """Method return need key to submit in write page."""
-        return query(selector)[0].get("value")
+        value = query(selector)[0].get("value")
+        return value if value else ''
 
     def get_post_data(self, html):
         """Method return post form data in write page."""
@@ -70,7 +71,13 @@ class DcWrite():
         data["ehqo_W"] = self.parse_data(query, "input#ehqo_W")
         data["dcs_key"] = self.parse_data(query, "input#dcs_key")
         data["cur_t"] = self.parse_data(query, "input#cur_t")
-        data["service_code"] = self.parse_data(query, "input#service_code")
+        data["service_code"] = self.parse_data(query,
+                                               "input[name=service_code]")
+        data["name"] = self.name
+        data["password"] = self.passwd
+        data["subject"] = self.subject
+        data["wiki_tag"] = ''
+        data["mode"] = 'W'
 
         return data
 
