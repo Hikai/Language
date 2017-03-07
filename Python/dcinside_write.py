@@ -17,11 +17,12 @@ class DcWrite():
         """
         Dcwrite initialize method.
 
-        name_gall = gallery name.
-        name = article author.
-        passwd = article password.
-        subject = article subject.
-        contents = article contents.
+        self.url = Dc gallery write page url.
+        self.name_gall = gallery name.
+        self.name = article author.
+        self.passwd = article password.
+        self.subject = article subject.
+        self.contents = article contents.
         """
         self.url = "http://gall.dcinside.com/board/write/?id={}"\
                    .format(name_gall)
@@ -32,7 +33,12 @@ class DcWrite():
         self.memo = contents
 
     def get_block_key(self, data_post):
-        """Method return block key."""
+        """
+        Method return block key.
+
+        url = block key page url.
+        req = bloc key page requests.
+        """
         while True:
             url = "http://gall.dcinside.com/block/block/"
             self.session.headers["X-Requested-With"] = "XMLHttpRequest"
@@ -43,7 +49,13 @@ class DcWrite():
             time.sleep(0.5)
 
     def get_post_data(self, html):
-        """Method return post form data in write page."""
+        """
+        Method return post form data in write page.
+
+        soup = BeautifulSoup value.
+        tags_input = soup first select.
+        data = post data dictionary value.
+        """
         soup = BeautifulSoup(html, "lxml")
         tags_input = soup.select(".s_img")[0]
         data = dict()
@@ -77,12 +89,21 @@ class DcWrite():
             print("failed.")
 
     def set_session(self):
-        """Method set request session."""
+        """
+        Method set request session.
+
+        self.session = requests session value.
+        """
         self.session = requests.session()
         self.session.headers["User-Agent"] = Factory.create().chrome()
 
     def submit(self, data_post):
-        """Method submit article."""
+        """
+        Method submit article.
+
+        url = submit page url.
+        header = read send header.
+        """
         url = "http://gall.dcinside.com/forms/article_submit"
         data_post["memo"] = self.memo
         data_post["code"] = "undefined"
