@@ -4,8 +4,8 @@ DCInside ariticle write script.
 
 . . .
 """
+from bs4 import BeautifulSoup
 from faker import Factory
-from pyquery import PyQuery
 import requests
 import time
 
@@ -29,50 +29,28 @@ class DcWrite():
         self.name = name
         self.passwd = passwd
         self.subject = subject
-        self.contents = contents
+        self.memo = contents
 
-    def get_block_key(self, block_key, ci_t):
+    def get_block_key(self, data_post):
         """Method return block key."""
         while True:
             url = "http://gall.dcinside.com/block/block/"
             self.session.headers["X-Requested-With"] = "XMLHttpRequest"
-            self.session.cookies["dcgame_top"] = 'Y'
-            data = dict(block_key=block_key, ci_t=ci_t, id=self.name_gall)
-            req = self.session.post(url, data=data)
+            req = self.session.post(url, data=data_post)
             if req.text != '':
                 return req.text
 
-            time.sleep(1)
-
-    def parse_data(self, query, selector):
-        """Method return need key to submit in write page."""
-        value = query(selector)[0].get("value")
-        return value if value else ''
+            time.sleep(0.5)
 
     def get_post_data(self, html):
         """Method return post form data in write page."""
+        soup = BeautifulSoup(html, "lxml")
+        tags_input = soup.select(".s_img")[0]
         data = dict()
-        query = PyQuery(html)
-        data["block_key"] = self.parse_data(query, "input#block_key")
-        data["ci_t"] = self.parse_data(query, "input[name=ci_t]")
-        data["r_key"] = self.parse_data(query, "input#r_key")
-        data["gallery_no"] = self.parse_data(query,
-                                             "input[name=gallery_no]")
-        data["c_key"] = self.parse_data(query, "input[name=c_key]")
-        data["upload_status"] = self.parse_data(query,
-                                                "input#upload_status")
-        data["clickbutton"] = self.parse_data(query, "input#clickbutton")
-        data["vid"] = self.parse_data(query, "input#vid")
-        data["ipt_movieCompType"] = self.parse_data(query,
-                                                    "input#ipt_movieCompType")
-        data["isMovie"] = self.parse_data(query, "input#isMovie")
-        data["user_ip"] = self.parse_data(query, "input#user_ip")
-        data["block_key"] = self.parse_data(query, "input#block_key")
-        data["ehqo_W"] = self.parse_data(query, "input#ehqo_W")
-        data["dcs_key"] = self.parse_data(query, "input#dcs_key")
-        data["cur_t"] = self.parse_data(query, "input#cur_t")
-        data["service_code"] = self.parse_data(query,
-                                               "input[name=service_code]")
+
+        for input in tags_input.select("input[type=hidden]"):
+            data[input["name"]] = input.get("value", '')
+
         data["name"] = self.name
         data["password"] = self.passwd
         data["subject"] = self.subject
@@ -90,26 +68,41 @@ class DcWrite():
         self.set_session()
         page = self.get_write_html()
         data_post = self.get_post_data(page)
-        print(data_post)
-        # block_key = self.get_block_key(block_key, ci_t)
-        # self.submit(block_key, ci_t, r_key)
+        self.prev_block = data_post['block_key']
+        data_post["block_key"] = self.get_block_key(data_post)
+
+        result = self.submit(data_post).text
+        if result.split("||")[0] != "true":
+            print(result)
+            print("failed.")
 
     def set_session(self):
         """Method set request session."""
         self.session = requests.session()
         self.session.headers["User-Agent"] = Factory.create().chrome()
 
-    def submit(self, block_key, ci_t, r_key):
+    def submit(self, data_post):
         """Method submit article."""
         url = "http://gall.dcinside.com/forms/article_submit"
-        data = dict(upload_status='N', id=self.name_gall, ci_t=ci_t,
-                    subject=self.subject, password=self.passwd, r_key=r_key,
-                    name=self.name, memo=self.contents, block_key=block_key,
-                    vid='', isMovie='', campus=0, ipt_movieCompType='',
-                    wiki_tag='', sijosae="tlwhtorororRl")
+        data_post["memo"] = self.memo
+        data_post["code"] = "undefined"
+        data_post["campus"] = 0
         self.session.headers["Referer"] = self.url
-        self.session.post(url, data=data)
-        # return self.session.post(url, data=data)
+        headers = {
+            'Pragma': 'no-cache',
+            'Origin': 'http://gall.dcinside.com',
+            'Accept-Encoding': 'gzip, deflate',
+            'Accept-Language': 'ko-KR,ko;q=0.8,en-US;q=0.6,en;q=0.4',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Accept': '*/*',
+            'Cache-Control': 'no-cache',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Connection': 'keep-alive',
+        }
+        # data_post = data_post.items()
+        # data_post.insert(0, ('block_key', self.prev_block))
+        return self.session.post(url, data=data_post, headers=headers)
 
-test = DcWrite("bns", "test", "test", "test", "test")
-test.run()
+if __name__ == '__main__':
+    test = DcWrite("4", "test", "test", "test", "<p>aaaaaaaaaaaa</p>")
+    test.run()
