@@ -86,7 +86,6 @@ class DcWrite():
         result = self.submit(data_post).text
         if result.split("||")[0] != "true":
             print(result)
-            print("failed.")
 
     def set_session(self):
         """
@@ -120,10 +119,8 @@ class DcWrite():
             'X-Requested-With': 'XMLHttpRequest',
             'Connection': 'keep-alive',
         }
-        # data_post = data_post.items()
-        # data_post.insert(0, ('block_key', self.prev_block))
         return self.session.post(url, data=data_post, headers=headers)
 
 if __name__ == '__main__':
-    test = DcWrite("4", "test", "test", "test", "<p>aaaaaaaaaaaa</p>")
+    test = DcWrite("4", "test", "test", "test", "test")
     test.run()
