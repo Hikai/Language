@@ -29,6 +29,7 @@ private:
 public:
 	Debugger(_In_ DWORD);
 	~Debugger();
+	void find_in_memory();
 	void read_memory();
 };
 	
@@ -148,6 +149,11 @@ BOOL Debugger::attach()
 
 	this->get_last_error("success attach");
 	return TRUE;
+}
+
+void Debugger::find_in_memory()
+{
+	return;
 }
 
 void Debugger::read_memory()
