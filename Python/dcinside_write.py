@@ -111,7 +111,6 @@ class DcWrite():
         headers = {
             'Pragma': 'no-cache',
             'Origin': 'http://gall.dcinside.com',
-            'Accept-Encoding': 'gzip, deflate',
             'Accept-Language': 'ko-KR,ko;q=0.8,en-US;q=0.6,en;q=0.4',
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
             'Accept': '*/*',
@@ -119,6 +118,7 @@ class DcWrite():
             'X-Requested-With': 'XMLHttpRequest',
             'Connection': 'keep-alive',
         }
+
         return self.session.post(url, data=data_post, headers=headers)
 
 if __name__ == '__main__':
