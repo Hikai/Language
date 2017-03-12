@@ -19,6 +19,7 @@ class Debugger {
 private:
 	HANDLE hnd_proc = NULL, hnd_me_token = NULL;
 	DWORD pid = 0;
+	BYTE **memory;
 
 	void create_file();
 	void binary_save(_In_ BYTE *);
@@ -29,7 +30,7 @@ private:
 public:
 	Debugger(_In_ DWORD);
 	~Debugger();
-	void find_in_memory();
+	void find_memory();
 	void read_memory();
 };
 	
@@ -151,9 +152,12 @@ BOOL Debugger::attach()
 	return TRUE;
 }
 
-void Debugger::find_in_memory()
+void Debugger::find_memory()
 {
-	return;
+	int size_array = sizeof(this->memory) / sizeof(*this->memory);
+	for (int i = 0; i < size_array; i++) {
+		std::cout << std::hex << this->memory[i] << std::endl;
+	}
 }
 
 void Debugger::read_memory()
@@ -170,6 +174,7 @@ void Debugger::read_memory()
 
 	this->create_file();
 
+	int count = 0;
 	while (min_addr_cur <= max_addr) {
 		VirtualQueryEx(this->hnd_proc, (LPVOID)min_addr_cur, (PMEMORY_BASIC_INFORMATION)&info_mem, sizeof(info_mem));
 
@@ -180,6 +185,7 @@ void Debugger::read_memory()
 			
 			for (SIZE_T i = 0; i < info_mem.RegionSize; i++) {
 				std::cout << std::hex << arr_dest[i];
+				this->memory[count++] = arr_dest;
 			}
 
 		}
