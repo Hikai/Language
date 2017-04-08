@@ -43,7 +43,6 @@ class DcWrite():
 
             time.sleep(1)
 
-
     def get_option_data(self):
         """Method return option_write data."""
         data = dict()
@@ -54,6 +53,10 @@ class DcWrite():
         data["mode"] = "write_verify"
 
         return data
+
+    def get_post_data(self, html):
+        """Method return post data in wrtie page."""
+        pass
 
     def get_write_page(self):
         """Method return write page html."""
