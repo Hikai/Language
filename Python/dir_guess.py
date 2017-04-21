@@ -13,8 +13,7 @@ class Crawl():
     def __init__(self, url):
         """Initialize method."""
         self.url = url
-        req = requests.get(self.url)
-        self.check_status_code(req.status_code)
+        self.run(self.url)
 
     def check_status_code(self, status_code):
         """Method check http status code."""
@@ -23,6 +22,18 @@ class Crawl():
             return True
         else:
             return False
+
+    def run(self, url):
+        """Method substantive running."""
+        req = requests.get(self.url)
+        if not self.check_status_code(req.status_code):
+            print("Error. Exception 2xx.")
+
+            return
+
+        # while True:
+        #     pass
+            # url = self.url
 
 
 if __name__ == "__main__":
