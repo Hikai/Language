@@ -31,9 +31,18 @@ class Crawl():
 
             return
 
-        # while True:
-        #     pass
-            # url = self.url
+        url = self.url
+        i = 0
+        while True:
+            if i >= 128:
+                break
+
+            url += chr(i)
+            req = requests.get(url)
+            if self.check_status_code(req.status_code):
+                print(chr(i))
+
+            i += 1
 
 
 if __name__ == "__main__":
