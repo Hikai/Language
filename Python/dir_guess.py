@@ -7,8 +7,8 @@ Hikai.
 import requests
 
 
-class Crawl():
-    """Crawl class."""
+class Search():
+    """Search class."""
 
     def __init__(self, url):
         """Initialize method."""
@@ -32,11 +32,11 @@ class Crawl():
             return
 
         while True:
-            i = 0
+            i = 32
             url = self.url
 
             for num in range(0, 10):
-                if i >= 128:
+                if i >= 127:
                     break
 
                 url += chr(i)
@@ -48,4 +48,4 @@ class Crawl():
 
 
 if __name__ == "__main__":
-    Crawl("http://www.naver.com")
+    Search("http://www.naver.com")
