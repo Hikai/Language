@@ -27,7 +27,7 @@ class Search():
         """Method substantive running."""
         req = requests.get(self.url)
         if not self.check_status_code(req.status_code):
-            print("Error. Exception 2xx.")
+            print("Error.")
 
             return
 
