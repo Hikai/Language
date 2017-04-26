@@ -31,20 +31,11 @@ class Search():
 
             return
 
-        while True:
-            i = 32
-            url = self.url
-
-            for num in range(0, 10):
-                if i >= 127:
-                    break
-
-                url += chr(i)
+        for i in range(0, 10):
+            for j in range(32, 128):
                 req = requests.get(url)
                 if self.check_status_code(req.status_code):
                     print(chr(i))
-
-                i += 1
 
 
 if __name__ == "__main__":
