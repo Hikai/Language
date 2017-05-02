@@ -31,11 +31,16 @@ class Search():
 
             return
 
-        for i in range(0, 10):
-            for j in range(32, 128):
-                req = requests.get(url)
-                if self.check_status_code(req.status_code):
-                    print(chr(i))
+        for i in range(32, 128):
+            if i == 32:
+                pass
+            else:
+                tmp_url = tmp_url[:-1]
+
+            tmp_url += chr(i)
+            req = requests.get(tmp_url)
+            if self.check_status_code(req.status_code):
+                print(chr(i))
 
 
 if __name__ == "__main__":
