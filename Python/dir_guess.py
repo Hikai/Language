@@ -31,6 +31,7 @@ class Search():
 
             return
 
+        tmp_url = url + '/'
         for i in range(32, 128):
             if i == 32:
                 pass
