@@ -33,6 +33,11 @@ class Search():
 
         tmp_url = url + '/'
         for i in range(0, 2):
+            if i == 0:
+                pass
+            else:
+                tmp_url += '%'
+
             for j in range(32, 128):
                 if j == 32:
                     pass
@@ -40,9 +45,10 @@ class Search():
                     tmp_url = tmp_url[:-1]
 
                 tmp_url += chr(j)
-                req = requests.get(tmp_url)
-                if self.check_status_code(req.status_code):
-                    print(chr(j))
+                print(tmp_url)
+                # req = requests.get(tmp_url)
+                # if self.check_status_code(req.status_code):
+                #     print(chr(j))
 
 
 if __name__ == "__main__":
