@@ -45,10 +45,9 @@ class Search():
                     tmp_url = tmp_url[:-1]
 
                 tmp_url += chr(j)
-                print(tmp_url)
-                # req = requests.get(tmp_url)
-                # if self.check_status_code(req.status_code):
-                #     print(chr(j))
+                req = requests.get(tmp_url)
+                if self.check_status_code(req.status_code):
+                    print(chr(j))
 
 
 if __name__ == "__main__":
