@@ -38,11 +38,8 @@ class Search():
             else:
                 tmp_url += '%'
 
-            for j in range(32, 128):
-                if j == 32:
-                    pass
-                else:
-                    tmp_url = tmp_url[:-1]
+            for j in range(33, 128):
+                tmp_url = tmp_url[:-1]
 
                 tmp_url += chr(j)
                 req = requests.get(tmp_url)
