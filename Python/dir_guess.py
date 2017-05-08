@@ -31,7 +31,7 @@ class Search():
 
             return
 
-        tmp_url = url + '/'
+        tmp_url = url + '/a'
         for i in range(0, 2):
             if i == 0:
                 pass
