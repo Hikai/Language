@@ -11,11 +11,11 @@ class A():
     num = 0
 
     def __init__(self, number):
-        """A class: init method."""
+        """Init method."""
         self.num = number
 
     def print_num(self):
-        """A class: print number."""
+        """Print number."""
         print(self.num)
 
 
@@ -25,12 +25,12 @@ class B(A):
     name = ""
 
     def __init__(self, number, name):
-        """B class: init method."""
+        """Init method."""
         A.__init__(self, number)
         self.name = name
 
     def print_all(self):
-        """B class: print all."""
+        """Print all."""
         A.print_num(self)
         print(self.name)
 
