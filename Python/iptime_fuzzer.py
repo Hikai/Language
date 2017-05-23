@@ -24,6 +24,8 @@ for menu in list_menu:
                 logging.write(i)
                 logging.write('\n')
 
+            break
+
         base_arg.pop()
 
     str_test = "{}=a".format(menu)
