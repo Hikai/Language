@@ -2,7 +2,7 @@
 """
 DCInside ariticle write script.
 
-. . .
+@hikai
 """
 from bs4 import BeautifulSoup
 from faker import Factory
@@ -31,6 +31,18 @@ class DcWrite():
         self.passwd = passwd
         self.subject = subject
         self.memo = contents
+
+        self.set_session()
+        page = self.get_write_html()
+        data_post = self.get_post_data(page)
+        self.prev_block = data_post["block_key"]
+        data_post["block_key"] = self.get_block_key(data_post)
+
+        result = self.submit(data_post).text
+        if result.split("||")[0] != "true":
+            print(result)
+        else:
+            print("Complete!")
 
     def get_block_key(self, data_post):
         """
@@ -74,18 +86,6 @@ class DcWrite():
     def get_write_html(self):
         """Method return write page html."""
         return self.session.get(self.url).text
-
-    def run(self):
-        """Running method."""
-        self.set_session()
-        page = self.get_write_html()
-        data_post = self.get_post_data(page)
-        self.prev_block = data_post['block_key']
-        data_post["block_key"] = self.get_block_key(data_post)
-
-        result = self.submit(data_post).text
-        if result.split("||")[0] != "true":
-            print(result)
 
     def set_session(self):
         """
