@@ -11,26 +11,26 @@ list_menu = ["tmenu", "smenu", "act", "wan", "ifname", "sel", "wan_type", "allow
 base_arg = ["./qemu-mipsel", "timepro.cgi", ""]
 str_menu = ""
 for index, menu in enumerate(list_menu):
-    str_test = "{}=".format(menu)
     for i in range(100, 1001):
+        str_test = "{}=".format(menu)
         str_test += 'a' * i
-        base_arg[2] = '\"' + str_menu + str_test + '\"'
+        base_arg[2] = str_menu + str_test
         proc = subprocess.Popen(base_arg, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = proc.communicate()
 
         if "Segmentation fault" in err:
+            print(base_arg)
             with open("log", 'w') as logging:
-                logging.write(menu, ' ')
+                logging.write(menu + ' ')
                 logging.write(str(i))
                 logging.write('\n')
 
             break
 
-        base_arg.pop()
-
     if len(list_menu) - 1 == index:
         str_test = "{}=a".format(menu)
     else:
         str_test = "{}=a&".format(menu)
+
     str_menu += str_test
     base_arg[2] = str_menu
