@@ -123,4 +123,3 @@ class DcWrite():
 
 if __name__ == '__main__':
     test = DcWrite("4", "test", "test", "test", "test")
-    test.run()
