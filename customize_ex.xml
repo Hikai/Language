@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<screenshot>
+	<head>
+		<major-version>3</major-version>
+		<minor-version>4</minor-version>
+		<gamename>bns</gamename>
+		<product-version>4.3.0.4441</product-version>
+		<time>2017-4-9 13:40:0</time>
+		<checksum>2de1acc1b2792acb09e152852f8dbc1f</checksum>
+		<checksum2>5f69caee4dc5ea99ea4dcae8746344b6</checksum2>
+	</head>
+	<body>
+		<location>
+			<name>파천성도</name>
+			<x>478.704</x>
+			<y>240.863</y>
+		</location>
+		<player>
+			<name>얀코링</name>
+			<level>55</level>
+			<mastery-level>11</mastery-level>
+			<faction>무림맹</faction>
+			<faction2>9</faction2>
+			<race>린</race>
+			<job>기공사</job>
+			<sex>여</sex>
+			<guild>
+				<name/>
+			</guild>
+			<equipped>
+				<hand>유성기공패 8단계</hand>
+				<body>화이트 엔젤</body>
+				<body-attached/>
+				<eye/>
+				<head/>
+				<ear>각성 자칸귀걸이</ear>
+				<finger>각성 폭주반지</finger>
+				<wrist>목본팔찌</wrist>
+				<waist>서락허리띠</waist>
+				<neck>목본목걸이</neck>
+				<gem1>환상보패</gem1>
+				<gem2>환상보패</gem2>
+				<gem3>환상보패</gem3>
+				<gem4>환상보패</gem4>
+				<gem5>환상보패</gem5>
+				<gem6>흑룡보패</gem6>
+				<gem7>흑룡보패</gem7>
+				<gem8>흑룡보패</gem8>
+				<soul>낙원령</soul>
+				<soul-2/>
+				<gloves>목본장갑</gloves>
+				<pet-1>수호석 1단계</pet-1>
+				<pet-2/>
+				<rune-1/>
+				<rune-2/>
+			</equipped>
+		</player>
+	</body>
+</screenshot>
