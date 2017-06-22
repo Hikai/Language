@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from bluetooth import *
-import sys
 """
 rfcomm scanner.
 
 thx google, thx github.
 """
+from bluetooth import *
+import sys
 
 
 def rfcommCon(addr, port):
