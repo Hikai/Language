@@ -16,6 +16,8 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 
+DWORD check_process(_In_ wchar_t *);
+
 class Debugger {
 private:
 	HANDLE hnd_proc = NULL, hnd_me_token = NULL;
@@ -181,6 +183,27 @@ void Debugger::read_memory()
 	}
 
 	std::cout << "End read meory" << std::endl;
+}
+
+DWORD check_process(_In_ wchar_t *name_proc)
+{
+	HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
+	PROCESSENTRY32 proc_entry;
+	proc_entry.dwSize = sizeof(PROCESSENTRY32);
+
+	if (Process32First(snapshot, &proc_entry) == TRUE)
+	{
+		while (Process32Next(snapshot, &proc_entry) == TRUE)
+		{
+			if (_wcsicmp(proc_entry.szExeFile, name_proc) == 0)
+			{
+				return proc_entry.th32ProcessID;
+			}
+		}
+	}
+	CloseHandle(snapshot);
+
+	return 0;
 }
 
 #endif
