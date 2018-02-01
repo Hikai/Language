@@ -11,12 +11,11 @@
 #include <string.h>
 #include <fstream>
 #include <iostream>
+#include <vector>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
-
-DWORD check_process(_In_ wchar_t *);
 
 class Debugger {
 private:
@@ -25,7 +24,8 @@ private:
 	BYTE **memory;
 
 	void create_file();
-	void binary_save(_In_ unsigned char *, size_t);
+	//void binary_save(_In_ unsigned char *, size_t);
+	void binary_save(_In_ std::vector<unsigned char>);
 	bool set_privilege(_In_ HANDLE, _In_ LPCTSTR, _In_ BOOL);
 	void get_last_error(_In_ std::string);
 	BOOL attach();
@@ -55,15 +55,14 @@ Debugger::~Debugger()
 void Debugger::create_file()
 {
 	std::ofstream file_out("dump.exe");
-	//file_out << "start" << std::endl;
 	file_out.close();
 }
 
-void Debugger::binary_save(_In_ unsigned char *buf, _In_ size_t len_buf)
+void Debugger::binary_save(_In_ std::vector<unsigned char> buf)
 {
 	std::ofstream file_out("dump.exe", std::ofstream::out | std::ofstream::binary | std::ofstream::app);
-	for (unsigned int i = 0; i < len_buf; i++) {
-		file_out << (unsigned char)buf[i];
+	for (unsigned int i = 0; i < buf.size(); i++) {
+		file_out << buf[i];
 	}
 	file_out.close();
 }
@@ -106,8 +105,6 @@ bool Debugger::set_privilege(_In_ HANDLE token, _In_ LPCTSTR name_priv, _In_ BOO
 
 void Debugger::get_last_error(_In_ std::string func)
 {
-	//std::cout << func.c_str() << std::endl;
-	//std::cout << GetLastError() << std::endl;
 	OutputDebugStringA(func.c_str());
 	OutputDebugStringA((LPCSTR)GetLastError());
 }
@@ -148,62 +145,22 @@ void Debugger::find_memory()
 
 void Debugger::read_memory()
 {
-	SYSTEM_INFO info;
-	MEMORY_BASIC_INFORMATION32 info_mem;
-	ULONGLONG max_addr, min_addr_cur;
-	BYTE *arr_dest;
-	SIZE_T readed;
-
-	GetSystemInfo(&info);
-	max_addr = (ULONGLONG)info.lpMaximumApplicationAddress;
-	min_addr_cur = (ULONGLONG)info.lpMinimumApplicationAddress;
+	unsigned char *p = NULL;
+	MEMORY_BASIC_INFORMATION mbi;
+	std::vector<unsigned char> buf;
 
 	this->create_file();
-
-	int count = 0;
-	while (min_addr_cur <= max_addr) {
-		VirtualQueryEx(this->hnd_proc, (LPVOID)min_addr_cur, (PMEMORY_BASIC_INFORMATION)&info_mem, sizeof(info_mem));
-
-		if ((info_mem.State & MEM_COMMIT) && (info_mem.Protect & PAGE_READWRITE)) {
-			arr_dest = new BYTE[info_mem.RegionSize];
-
-			ReadProcessMemory(this->hnd_proc, (LPCVOID)info_mem.BaseAddress, arr_dest, info_mem.RegionSize, &readed);
-
-			for (SIZE_T i = 0; i < info_mem.RegionSize; i++) {
-				//std::cout << std::hex << arr_dest[i];
-				//this->memory[count++] = arr_dest;
-				size_t len = (sizeof arr_dest / sizeof arr_dest[0]);
-				this->binary_save(arr_dest, len);
-			}
-
+	for (p = NULL; VirtualQueryEx(this->hnd_proc, p, &mbi, sizeof(mbi)) == sizeof(mbi); p += mbi.RegionSize) {
+		if ((mbi.State == MEM_COMMIT) && (mbi.Type == MEM_MAPPED || mbi.Type == MEM_PRIVATE)) {
+			SIZE_T bytes_read = 0;
+			buf.resize(mbi.RegionSize);
+			ReadProcessMemory(this->hnd_proc, p, &buf[0], mbi.RegionSize, &bytes_read);
+			buf.resize(bytes_read);
+			this->binary_save(buf);
 		}
-
-		//std::cout << std::hex << "Min: " << min_addr_cur << "\nMax: " << max_addr << "\nRegion size: " << info_mem.RegionSize << std::endl;
-		min_addr_cur += info_mem.RegionSize;
 	}
 
 	std::cout << "End read meory" << std::endl;
-}
-
-DWORD check_process(_In_ wchar_t *name_proc)
-{
-	HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
-	PROCESSENTRY32 proc_entry;
-	proc_entry.dwSize = sizeof(PROCESSENTRY32);
-
-	if (Process32First(snapshot, &proc_entry) == TRUE)
-	{
-		while (Process32Next(snapshot, &proc_entry) == TRUE)
-		{
-			if (_wcsicmp(proc_entry.szExeFile, name_proc) == 0)
-			{
-				return proc_entry.th32ProcessID;
-			}
-		}
-	}
-	CloseHandle(snapshot);
-
-	return 0;
 }
 
 #endif
