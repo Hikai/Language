@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
 import asyncio
 import discord
 from urllib.request import urlretrieve
 
 client = discord.Client()
+path_save = ""
 
 
 @client.event
@@ -34,7 +34,7 @@ async def on_message(message):
             dict_var = log.attachments[0]
             counter = 0
             if dict_var['filename'].startswith('unknown'):
-                ext = dict_var['filename'].split[1]
+                ext = dict_var['filename'].split('.')[1]
                 dict_var['filename'] = "unknown{}.{}".format(counter, ext)
                 counter += 1
 
