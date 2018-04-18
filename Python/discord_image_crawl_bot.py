@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 import asyncio
 import discord
-from urllib.request import urlretrieve
+import requests
+import shutil
 
 client = discord.Client()
 path_save = ""
@@ -38,7 +40,13 @@ async def on_message(message):
                 dict_var['filename'] = "unknown{}.{}".format(counter, ext)
                 counter += 1
 
-            urlretrieve(dict_var['url'], dict_var['filename'])
+            r = requests.get(dict_var['url'], stream=True)
+            if r.status_code == 200:
+                with open(dict_var['filename'], 'wb') as f:
+                    r.raw.decode_content = True
+                    shutil.copyfileobj(r.raw, f)
+            else:
+                print("Failed {}\n{}".format(r.status_code, dict_var['url']))
 
         print("End of the image crawl.")
 
