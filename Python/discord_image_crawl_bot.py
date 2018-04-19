@@ -35,13 +35,12 @@ async def on_message(message):
             if len(log.attachments) <= 0:
                 continue
 
-            dict_var = log.attachments[0]
-            counter = 0
-
             if not isdir(path_save):
                 from os import makedirs
                 makedirs(path_save)
-
+                
+            dict_var = log.attachments[0]
+            counter = 0    
             if dict_var['filename'].startswith('unknown'):
                 ext = dict_var['filename'].split('.')[1]
                 dict_var['filename'] = "unknown{}.{}".format(counter, ext)
